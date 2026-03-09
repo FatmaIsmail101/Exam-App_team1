@@ -12,7 +12,7 @@ class ExamApp extends StatelessWidget {
     return MaterialApp(
       title: 'Exam Application',
       theme: ThemeApp.themeApp,
-      initialRoute: RoutesName.login,
+      initialRoute: RoutesName.forgetPassword,
       onGenerateRoute: Routes.routes,
     );
   }

@@ -17,11 +17,12 @@ class ThemeApp {
       titleSmall: TextThemeApp.semiBold12Blue,
       bodyLarge: TextThemeApp.bodySmall16Red,
       labelMedium: TextThemeApp.bodySmall16Red,
+      labelSmall: TextThemeApp.bodyLarge14Grey,
     ),
     inputDecorationTheme: TextFieldTheme.inputDecorationThemetextField,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: .symmetric(horizontal: 146.w, vertical: 14.h),
+        padding: .symmetric(vertical: 14.h),
         textStyle: TextThemeApp.medium20Black.copyWith(
           color: Color(0xffF9F9F9),
         ),
