@@ -1,14 +1,15 @@
 part of '../forget_password_view_model_cubit.dart';
 
 class ForgetPasswordState {
-  BaseState<AuthBaseResponse> authBaseResponse = BaseState<AuthBaseResponse>(
-    isLoading: true,
-    data: null,
-    errorMessage: null,
-  );
+  BaseState<ForgetPasswordResponse> authBaseResponse =
+      BaseState<ForgetPasswordResponse>(
+        isLoading: true,
+        data: null,
+        errorMessage: null,
+      );
   ForgetPasswordState({required this.authBaseResponse});
   ForgetPasswordState copyWith({
-    BaseState<AuthBaseResponse>? authBaseResponse,
+    BaseState<ForgetPasswordResponse>? authBaseResponse,
   }) {
     return ForgetPasswordState(
       authBaseResponse: authBaseResponse ?? this.authBaseResponse,
@@ -17,7 +18,7 @@ class ForgetPasswordState {
 
   static ForgetPasswordState initial() {
     return ForgetPasswordState(
-      authBaseResponse: BaseState<AuthBaseResponse>(
+      authBaseResponse: BaseState<ForgetPasswordResponse>(
         isLoading: true,
         data: null,
         errorMessage: null,

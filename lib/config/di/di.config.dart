@@ -37,7 +37,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final dioModule = _$DioModule();
-    gh.factory<_i361.Dio>(() => dioModule.dioModule);
+    gh.singleton<_i361.Dio>(() => dioModule.dio);
     gh.factory<_i627.ForgetPasswordClient>(
       () => _i627.ForgetPasswordClient(gh<_i361.Dio>()),
     );

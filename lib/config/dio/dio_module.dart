@@ -8,11 +8,9 @@ abstract class DioModule {
   @singleton
   Dio get dio => Dio(
     BaseOptions(
-
       baseUrl: AppEndPoints.baseUrl,
       connectTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
     ),
-
   )..interceptors.add(PrettyDioLogger(requestBody: true, responseBody: true));
 }

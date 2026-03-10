@@ -5,14 +5,12 @@ part 'auth_base_response.g.dart';
 @JsonSerializable()
 class AuthBaseResponse {
   @JsonKey(name: "message")
-  final String? message;
-  @JsonKey(name: "info")
-  final String? info;
+  String? message;
+  @JsonKey(name: "token")
+  String? token;
 
-  AuthBaseResponse({this.message, this.info});
-
+  AuthBaseResponse({this.message, this.token});
   factory AuthBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$AuthBaseResponseFromJson(json);
-
   Map<String, dynamic> toJson() => _$AuthBaseResponseToJson(this);
 }
