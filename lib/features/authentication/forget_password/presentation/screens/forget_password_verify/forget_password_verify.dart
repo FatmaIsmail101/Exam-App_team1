@@ -1,13 +1,24 @@
+import 'package:exam_app_elevate/core/notification/notification.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/presentation/screens/forget_password_verify/widgets/pin_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/values/app_strings.dart';
+import '../../../data/models/forget_password/forget_password_request.dart';
+import '../../view_model/forget_password_view_model_cubit.dart';
+import '../../view_model/states/forget_password_event.dart';
 import '../widgets/forget_password_block.dart';
 
 class ForgetPasswordVerify extends StatelessWidget {
-  const ForgetPasswordVerify({super.key, required this.pageController});
+  ForgetPasswordVerify({
+    super.key,
+    required this.pageController,
+    required this.controller,
+  });
   final PageController pageController;
+  TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -42,7 +53,50 @@ class ForgetPasswordVerify extends StatelessWidget {
                   height: 6,
                 ),
                 // هنا تقدر تضيف الـ recognizer عشان لما يضغط يعيد الإرسال
-                // recognizer: TapGestureRecognizer()..onTap = () { /* Action */ },
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    context
+                        .read<ForgetPasswordViewModel>()
+                        .doIntent(
+                          event: SendEmailEvent(),
+                          request: ForgetPasswordRequest(
+                            email: controller.text,
+                          ),
+                        )
+                        .then((value) {
+                          final viewModel = context
+                              .watch<ForgetPasswordViewModel>();
+                          if (viewModel.state.authBaseResponse.data != null &&
+                              viewModel.state.authBaseResponse.errorMessage ==
+                                  null &&
+                              viewModel.state.authBaseResponse.isLoading ==
+                                  false) {
+                            NotificationBar.showNotification(
+                              message:
+                                  viewModel.state.authBaseResponse.data?.info ??
+                                  "",
+                              type: .success, // استخدمي اسم الـ Enum الصح عندك
+                              context: context,
+                            );
+                          } else if (viewModel.state.authBaseResponse.data ==
+                                  null &&
+                              viewModel.state.authBaseResponse.errorMessage !=
+                                  null &&
+                              viewModel.state.authBaseResponse.isLoading ==
+                                  false) {
+                            NotificationBar.showNotification(
+                              message:
+                                  viewModel
+                                      .state
+                                      .authBaseResponse
+                                      .errorMessage ??
+                                  "",
+                              type: .failure,
+                              context: context,
+                            );
+                          }
+                        });
+                  },
               ),
             ],
           ),

@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final authBaseResponse = authBaseResponseFromJson(jsonString);
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_base_response.g.dart';

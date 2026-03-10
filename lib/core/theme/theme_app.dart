@@ -53,5 +53,8 @@ class ThemeApp {
     bottomNavigationBarTheme:
         BottomNavigationBarThemeApp.bottomNavigationBarThemeData,
     cardTheme: ContainerThemeApp.cardThemeData,
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: Color(0xff02369C),
+    ),
   );
 }
