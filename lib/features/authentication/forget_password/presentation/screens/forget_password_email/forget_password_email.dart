@@ -10,14 +10,15 @@ import '../../../data/models/forget_password/forget_password_request.dart';
 import '../../view_model/forget_password_view_model_cubit.dart';
 import '../../view_model/states/forget_password_event.dart';
 
+@immutable
 class ForgetPasswordEmail extends StatefulWidget {
-  ForgetPasswordEmail({
+  const ForgetPasswordEmail({
     super.key,
     required this.pageController,
     required this.controller,
   });
   final TextEditingController controller;
-  PageController pageController;
+  final PageController pageController;
 
   @override
   State<ForgetPasswordEmail> createState() => _ForgetPasswordEmailState();
@@ -40,16 +41,16 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
       },
       child: BlocListener<ForgetPasswordViewModel, ForgetPasswordState>(
         listener: (context, state) {
-          if (state.authBaseResponse.errorMessage == null &&
-              state.authBaseResponse.data == null &&
-              state.authBaseResponse.isLoading == true) {
+          if (state.forgetePasswordState.errorMessage == null &&
+              state.forgetePasswordState.data == null &&
+              state.forgetePasswordState.isLoading == true) {
             CircularProgressIndicator();
           }
-          if (state.authBaseResponse.errorMessage == null &&
-              state.authBaseResponse.data != null &&
-              state.authBaseResponse.isLoading == false) {
+          if (state.forgetePasswordState.errorMessage == null &&
+              state.forgetePasswordState.data != null &&
+              state.forgetePasswordState.isLoading == false) {
             NotificationBar.showNotification(
-              message: state.authBaseResponse.data?.info ?? "",
+              message: state.forgetePasswordState.data?.info ?? "",
               type: .success,
               context: context,
             );
@@ -64,22 +65,23 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
               }
             }
           }
-          if (state.authBaseResponse.errorMessage != null &&
-              state.authBaseResponse.data == null &&
-              state.authBaseResponse.isLoading == false) {
+          if (state.forgetePasswordState.errorMessage != null &&
+              state.forgetePasswordState.data == null &&
+              state.forgetePasswordState.isLoading == false) {
             NotificationBar.showNotification(
-              message: state.authBaseResponse.errorMessage!,
+              message: state.forgetePasswordState.errorMessage!,
               type: .failure,
               context: context,
             );
           }
         },
         listenWhen: (previous, current) {
-          return current.authBaseResponse.isLoading !=
-                  previous.authBaseResponse.isLoading ||
-              current.authBaseResponse.errorMessage !=
-                  previous.authBaseResponse.errorMessage ||
-              current.authBaseResponse.data != previous.authBaseResponse.data;
+          return current.forgetePasswordState.isLoading !=
+                  previous.forgetePasswordState.isLoading ||
+              current.forgetePasswordState.errorMessage !=
+                  previous.forgetePasswordState.errorMessage ||
+              current.forgetePasswordState.data !=
+                  previous.forgetePasswordState.data;
         },
         child: Column(
           crossAxisAlignment: .stretch,

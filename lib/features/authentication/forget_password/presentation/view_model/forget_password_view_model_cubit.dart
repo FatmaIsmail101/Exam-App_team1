@@ -7,21 +7,31 @@ import 'package:injectable/injectable.dart';
 import '../../../../../config/base_classes/base_response.dart';
 import '../../../../../config/base_classes/base_state.dart';
 import '../../data/models/forget_password/forget_password_response.dart';
+import '../../data/models/verify_email/verify_email_request.dart';
+import '../../data/models/verify_email/verify_email_response.dart';
+import '../../domain/use_case/verify_email_use_case.dart';
 
 part 'states/forget_password_view_model_state.dart';
 
 @injectable
 class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
-  ForgetPasswordUseCase _sendEmailuUseCase;
-  ForgetPasswordViewModel(this._sendEmailuUseCase)
+  final ForgetPasswordUseCase _sendEmailuUseCase;
+  final VerifyEmailUseCase _verifyEmailUseCase;
+  ForgetPasswordViewModel(this._sendEmailuUseCase, this._verifyEmailUseCase)
     : super(ForgetPasswordState.initial());
   Future<void> doIntent({
-    required ForgetPasswordEvent event,
-    required ForgetPasswordRequest request,
+    ForgetPasswordEvent? event,
+    ForgetPasswordRequest? request,
+    VerifyEmailRequest? verifyEmailRequest,
   }) async {
     switch (event) {
       case SendEmailEvent():
-        await _sendEmail(request);
+        await _sendEmail(request ?? ForgetPasswordRequest(email: ""));
+        break;
+      case VerifyEmailEvent():
+        await _verifyEmail(verifyEmailRequest ?? VerifyEmailRequest(code: ""));
+        break;
+      case null:
         break;
     }
   }
@@ -53,6 +63,43 @@ class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
         emit(
           state.copyWith(
             authBaseResponse: BaseState<ForgetPasswordResponse>(
+              isLoading: false,
+              data: null,
+              errorMessage: response.message,
+            ),
+          ),
+        );
+        break;
+    }
+  }
+
+  Future<void> _verifyEmail(VerifyEmailRequest request) async {
+    emit(
+      state.copyWith(
+        verifyEmailResponse: BaseState<VerifyEmailResponse>(
+          isLoading: true,
+          data: null,
+          errorMessage: null,
+        ),
+      ),
+    );
+    final response = await _verifyEmailUseCase.verifyEmail(request);
+    switch (response) {
+      case SuccessBaseResponse<VerifyEmailResponse>():
+        emit(
+          state.copyWith(
+            verifyEmailResponse: BaseState<VerifyEmailResponse>(
+              isLoading: false,
+              data: response.data,
+              errorMessage: null,
+            ),
+          ),
+        );
+        break;
+      case ErrorBaseResponse<VerifyEmailResponse>():
+        emit(
+          state.copyWith(
+            verifyEmailResponse: BaseState<VerifyEmailResponse>(
               isLoading: false,
               data: null,
               errorMessage: response.message,

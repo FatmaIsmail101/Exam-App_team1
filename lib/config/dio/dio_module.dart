@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:dio/dio.dart';
 import 'package:exam_app_elevate/core/values/end_points.dart';
 import 'package:injectable/injectable.dart';

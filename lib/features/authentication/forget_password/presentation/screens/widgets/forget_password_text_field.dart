@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+@immutable
 class ForgetPasswordTextField extends StatefulWidget {
-  ForgetPasswordTextField({
+  const ForgetPasswordTextField({
     super.key,
     required this.hintText,
     required this.labelText,
@@ -13,7 +14,7 @@ class ForgetPasswordTextField extends StatefulWidget {
   final String hintText;
   final String labelText;
   final String? Function(String?)? validator;
-  TextEditingController controller;
+  final TextEditingController controller;
   final TextInputType? textInputType;
   @override
   State<ForgetPasswordTextField> createState() =>
