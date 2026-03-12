@@ -24,7 +24,7 @@ class PinWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ForgetPasswordViewModel, ForgetPasswordState>(
       builder: (context, state) {
-        bool isError = state?.verifyEmailState.errorMessage != null;
+        bool isError = state.verifyEmailState.errorMessage != null;
         final hasError = state.verifyEmailState.errorMessage != null;
         return Stack(
           children: [
