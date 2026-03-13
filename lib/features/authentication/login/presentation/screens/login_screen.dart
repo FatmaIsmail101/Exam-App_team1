@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/di/di.dart';
+import '../../../../../core/routes/routes_name.dart';
 import '../../../../../core/theme/text/text_theme_app.dart';
 import '../cubit/cubit.dart';
 import '../cubit/state.dart';
@@ -25,20 +26,27 @@ class LoginScreen extends StatelessWidget {
           if (state is LoginSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text('Welcome ${state.login.user.username}',style:TextThemeApp.medium20Black.copyWith(
-                      fontSize: 12.sp,color: Colors.white) ,),
-                  backgroundColor: const Color(0xff4CAF50)
-
+                content: Text(
+                  'Welcome ${state.login.user.username}',
+                  style: TextThemeApp.medium20Black.copyWith(
+                    fontSize: 12.sp,
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: const Color(0xff4CAF50),
               ),
             );
-
           } else if (state is LoginError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message,style:TextThemeApp.medium20Black.copyWith(
-                    fontSize: 12.sp,color: Colors.white) ,),
-                backgroundColor: const Color(0xffCC1010)
-
+                content: Text(
+                  state.message,
+                  style: TextThemeApp.medium20Black.copyWith(
+                    fontSize: 12.sp,
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: const Color(0xffCC1010),
               ),
             );
           }
@@ -74,8 +82,9 @@ class LoginScreen extends StatelessWidget {
                         if (value == null || value.isEmpty) {
                           return 'This Email is not valid';
                         }
-                        final emailRegex =
-                        RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
+                        final emailRegex = RegExp(
+                          r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$',
+                        );
                         if (!emailRegex.hasMatch(value)) {
                           return 'This Email is not valid';
                         }
@@ -116,7 +125,8 @@ class LoginScreen extends StatelessWidget {
                                 color: const Color(0xff535353),
                               ),
                               onPressed: () => setState(
-                                      () => _obscurePassword = !_obscurePassword),
+                                () => _obscurePassword = !_obscurePassword,
+                              ),
                             ),
                           ),
                         );
@@ -134,25 +144,33 @@ class LoginScreen extends StatelessWidget {
                                 return Checkbox(
                                   value: _rememberMe,
                                   activeColor: const Color(0xff02369C),
-                                  onChanged: (val) =>
-                                      setState(() => _rememberMe = val ?? false),
+                                  onChanged: (val) => setState(
+                                    () => _rememberMe = val ?? false,
+                                  ),
                                 );
                               },
                             ),
                             Text(
                               'Remember me',
-                              style: TextThemeApp.medium20Black
-                                  .copyWith(fontSize: 13.sp),
+                              style: TextThemeApp.medium20Black.copyWith(
+                                fontSize: 13.sp,
+                              ),
                             ),
                           ],
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.forgetPassword,
+                            );
+                          },
                           child: Text(
                             'Forget password?',
                             style: TextThemeApp.medium20Black.copyWith(
-                                fontSize: 12.sp,
-                                decoration: TextDecoration.underline),
+                              fontSize: 12.sp,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
                         ),
                       ],
@@ -166,16 +184,14 @@ class LoginScreen extends StatelessWidget {
                         onPressed: isLoading
                             ? null
                             : () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<LoginCubit>().login(
-                              email: _emailController.text.trim(),
-                              password:
-                              _passwordController.text.trim(),
-                              rememberMe: _rememberMe,
-
-                            );
-                          }
-                        },
+                                if (_formKey.currentState!.validate()) {
+                                  context.read<LoginCubit>().login(
+                                    email: _emailController.text.trim(),
+                                    password: _passwordController.text.trim(),
+                                    rememberMe: _rememberMe,
+                                  );
+                                }
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff02369C),
                           padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -185,16 +201,16 @@ class LoginScreen extends StatelessWidget {
                         ),
                         child: isLoading
                             ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
+                                color: Colors.white,
+                              )
                             : Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xffF9F9F9),
-                          ),
-                        ),
+                                'Login',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xffF9F9F9),
+                                ),
+                              ),
                       ),
                     ),
                     SizedBox(height: 16.h),
@@ -205,8 +221,9 @@ class LoginScreen extends StatelessWidget {
                         children: [
                           Text(
                             "Don't have an account? ",
-                            style: TextThemeApp.medium20Black
-                                .copyWith(fontSize: 15.sp),
+                            style: TextThemeApp.medium20Black.copyWith(
+                              fontSize: 15.sp,
+                            ),
                           ),
                           GestureDetector(
                             onTap: () {},

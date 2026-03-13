@@ -21,7 +21,8 @@ class _ForgetPasswordClient implements ForgetPasswordClient {
 
   @override
   Future<ForgetPasswordResponse> forgetPassword(
-      ForgetPasswordRequest request,) async {
+    ForgetPasswordRequest request,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -30,11 +31,11 @@ class _ForgetPasswordClient implements ForgetPasswordClient {
     final _options = _setStreamType<ForgetPasswordResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
-        _dio.options,
-        'https://exam.elevateegy.com/api/v1/auth/forgotPassword',
-        queryParameters: queryParameters,
-        data: _data,
-      )
+            _dio.options,
+            'https://exam.elevateegy.com/api/v1/auth/forgotPassword',
+            queryParameters: queryParameters,
+            data: _data,
+          )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
@@ -58,11 +59,11 @@ class _ForgetPasswordClient implements ForgetPasswordClient {
     final _options = _setStreamType<VerifyEmailResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
-        _dio.options,
-        'https://exam.elevateegy.com/api/v1/auth/verifyResetCode',
-        queryParameters: queryParameters,
-        data: _data,
-      )
+            _dio.options,
+            'https://exam.elevateegy.com/api/v1/auth/verifyResetCode',
+            queryParameters: queryParameters,
+            data: _data,
+          )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
@@ -86,11 +87,11 @@ class _ForgetPasswordClient implements ForgetPasswordClient {
     final _options = _setStreamType<AuthBaseResponse>(
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
-        _dio.options,
-        'https://exam.elevateegy.com/api/v1/auth/resetPassword',
-        queryParameters: queryParameters,
-        data: _data,
-      )
+            _dio.options,
+            'https://exam.elevateegy.com/api/v1/auth/resetPassword',
+            queryParameters: queryParameters,
+            data: _data,
+          )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
@@ -118,9 +119,7 @@ class _ForgetPasswordClient implements ForgetPasswordClient {
   }
 
   String _combineBaseUrls(String dioBaseUrl, String? baseUrl) {
-    if (baseUrl == null || baseUrl
-        .trim()
-        .isEmpty) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
       return dioBaseUrl;
     }
 
