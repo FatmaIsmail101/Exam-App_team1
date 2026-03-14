@@ -45,7 +45,11 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
           if (state.forgetePasswordState.errorMessage == null &&
               state.forgetePasswordState.data == null &&
               state.forgetePasswordState.isLoading == true) {
-            CircularProgressIndicator();
+            NotificationBar.showNotification(
+              message: "message",
+              type: .warning,
+              context: context,
+            );
           }
           if (state.forgetePasswordState.errorMessage == null &&
               state.forgetePasswordState.data != null &&
@@ -112,11 +116,19 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
             SizedBox(height: 16.h),
             ElevatedButton(
               onPressed: () {
-                context.read<ForgetPasswordViewModel>().doIntent(
-                  event: SendEmailEvent(
-                    ForgetPasswordRequest(email: widget.controller.text),
-                  ),
-                );
+                if (widget.controller.text.isNotEmpty) {
+                  context.read<ForgetPasswordViewModel>().doIntent(
+                    event: SendEmailEvent(
+                      ForgetPasswordRequest(email: widget.controller.text),
+                    ),
+                  );
+                } else if (widget.controller.text.isEmpty) {
+                  NotificationBar.showNotification(
+                    message: AppStrings.textFieldEmpty,
+                    type: .warning,
+                    context: context,
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: (isFormValid == false)

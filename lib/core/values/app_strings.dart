@@ -12,6 +12,8 @@ abstract class AppStrings {
   static const String emailVerification = "Email verification";
   static const String emailVerificationDescription =
       "Please enter your code that send to your email address";
+  static const String textFieldEmpty = "This field can't be empty";
+
   static const String verifyText = "Didn't receive code? ";
   static const String resetPassword = "Reset password";
   static const String resetPasswordDescription =

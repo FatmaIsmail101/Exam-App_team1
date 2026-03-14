@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../config/secure/flutter_secure_storage.dart';
 import '../../../../../../core/notification/notification.dart';
+import '../../../../../../core/values/app_keys.dart';
 import '../../../../../../core/values/app_strings.dart';
 import '../../../data/models/reset_password/reset_password_request.dart';
 import '../../view_model/states/forget_password_event.dart';
@@ -25,15 +27,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   final pageController = PageController();
 
-  final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
+
+  final confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    emailController.dispose();
+    confirmPasswordController.dispose();
     passwordController.dispose();
     pageController.dispose();
   }
@@ -41,6 +43,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return BlocListener<ForgetPasswordViewModel, ForgetPasswordState>(
       listener: (context, state) async {
         if (state.resetPasswordState.isLoading == false &&
@@ -92,24 +95,35 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
             SizedBox(height: 8.h),
             ForgetPasswordTextField(
-              controller: emailController,
+              controller: passwordController,
               textInputType: TextInputType.emailAddress,
               validator: (value) {
+                // 1. التأكد إن الحقل مش فاضي
                 if (value == null || value.isEmpty) {
-                  return AppStrings.emailMessage;
+                  return 'Password must not be empty';
                 }
-                String pattern = AppStrings.emailRegex;
-                RegExp regex = RegExp(pattern);
-                if (!regex.hasMatch(value)) {
-                  return AppStrings.emailMessage;
+
+                // 2. التأكد من الطول (على الأقل 6 حروف)
+                if (value.length < 6) {
+                  return 'Password must be at least 6 characters';
                 }
+                if (!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
+                  return 'Must contain at least one upper case letter';
+                }
+
+                // 4. التأكد من وجود رقم واحد على الأقل (Number)
+                if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
+                  return 'Must contain at least one number';
+                }
+
+                // لو كله تمام
                 return null;
               },
-              hintText: AppStrings.emailHint,
-              labelText: AppStrings.emailLabel,
+              hintText: AppStrings.hintNewPassword,
+              labelText: AppStrings.labelNewPassword,
             ),
             ForgetPasswordTextField(
-              controller: passwordController,
+              controller: confirmPasswordController,
               textInputType: TextInputType.visiblePassword,
               validator: (value) {
                 // 1. التأكد إن الحقل مش فاضي
@@ -138,15 +152,38 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
             SizedBox(height: 24.h),
             ElevatedButton(
-              onPressed: () {
-                context.read<ForgetPasswordViewModel>().doIntent(
-                  event: ResetPasswordEvent(
-                    ResetPasswordRequest(
-                      password: passwordController.text,
-                      email: emailController.text,
-                    ),
-                  ),
+              onPressed: () async {
+                final cashedEmail = await CashingFlutterSecureStorage.getToken(
+                  AppKeys.email,
                 );
+
+                if (passwordController.text.isNotEmpty ||
+                    confirmPasswordController.text.isNotEmpty &&
+                        passwordController.text ==
+                            confirmPasswordController.text) {
+                  context.read<ForgetPasswordViewModel>().doIntent(
+                    event: ResetPasswordEvent(
+                      ResetPasswordRequest(
+                        password: passwordController.text,
+                        email: cashedEmail ?? "",
+                      ),
+                    ),
+                  );
+                } else if (passwordController.text.isEmpty ||
+                    confirmPasswordController.text.isEmpty) {
+                  NotificationBar.showNotification(
+                    message: AppStrings.textFieldEmpty,
+                    type: .warning,
+                    context: context,
+                  );
+                } else if (passwordController.text !=
+                    confirmPasswordController.text) {
+                  NotificationBar.showNotification(
+                    message: "The Password isn't match",
+                    type: .warning,
+                    context: context,
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: (isFormValid == false)

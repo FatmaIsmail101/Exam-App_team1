@@ -9,11 +9,11 @@ class CashingFlutterSecureStorage {
     storage = FlutterSecureStorage();
   }
 
-  static Future<void> saveToken(String token) async {
-    await storage.write(key: AppKeys.token, value: token);
+  static Future<void> saveToken(String token, String value) async {
+    await storage.write(key: AppKeys.token, value: value);
   }
 
-  static Future<String?> getToken() async {
-    return await storage.read(key: AppKeys.token);
+  static Future<String?> getToken(String key) async {
+    return await storage.read(key: key);
   }
 }

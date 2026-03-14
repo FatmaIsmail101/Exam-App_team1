@@ -24,7 +24,10 @@ class ResetPasswordDataSourceImpl implements ResetPasswordDataSourceContract {
   ) async {
     try {
       final response = await client.resetPassword(request);
-      CashingFlutterSecureStorage.saveToken(AppKeys.token);
+      CashingFlutterSecureStorage.saveToken(
+        AppKeys.token,
+        response.token ?? "",
+      );
       return SuccessBaseResponse<AuthBaseResponse>(data: response);
     } on DioException catch (e) {
       return ErrorBaseResponse<AuthBaseResponse>(

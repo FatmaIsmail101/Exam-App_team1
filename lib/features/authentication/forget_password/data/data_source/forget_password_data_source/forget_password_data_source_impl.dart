@@ -3,6 +3,8 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:exam_app_elevate/config/secure/flutter_secure_storage.dart';
+import 'package:exam_app_elevate/core/values/app_keys.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/data/data_source/forget_password_data_source/forget_password_data_source_contract.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/data/models/forget_password/forget_password_request.dart';
 import 'package:injectable/injectable.dart';
@@ -26,6 +28,7 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSourceContract {
   ) async {
     try {
       final response = await client.forgetPassword(request);
+      CashingFlutterSecureStorage.saveToken(AppKeys.email, request.email ?? "");
       // لو الـ API رجع 200/201
       return SuccessBaseResponse<ForgetPasswordResponse>(data: response);
     } on DioException catch (e) {
