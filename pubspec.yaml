@@ -14,22 +14,32 @@ dependencies:
     sdk: flutter
   google_fonts: ^8.0.2 #For Text & Fonts
   flutter_screenutil: ^5.9.3 #For Responsive UI
+  pin_code_fields: ^9.1.0 #For Verification of Email
+  awesome_snackbar_content: 0.1.8 #For Notifications
+  retrofit: ^4.9.0 #is a dio client generator using source_gen and inspired by Chopper and Retrofit.
+  pretty_dio_logger: ^1.4.0  # is a Dio interceptor that logs network calls in a pretty, easy to read format
+  json_annotation: ^4.9.0 #Classes and helper functions that support JSON code generation via the `json_serializable` package
+  flutter_secure_storage: ^10.0.0 #For Caching
+  # add injectable to your dependencies
+  injectable:
+  get_it:
 
+  bloc: ^9.2.0
+  equatable: ^2.0.8
+  flutter_bloc: ^9.1.1 #For State Management
+  talker_bloc_logger: ^5.1.15 #For Show The Bloc Transation
 
 
   cupertino_icons: ^1.0.8
-  injectable:
-  get_it:
-  retrofit: ^4.9.0
+  talker_flutter: ^5.1.15
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   injectable_generator:
-  build_runner:
-  retrofit_generator: ^10.0.1
-  json_serializable: ^6.10.0
-
+  retrofit_generator: ^10.0.1 #Generate code from Retrofit by annotation
+  build_runner: ^2.6.0 #Generation
+  json_serializable: ^6.10.0 #Generate code from JSON by annotating Dart classes
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
