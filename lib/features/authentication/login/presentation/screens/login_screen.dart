@@ -13,11 +13,11 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _emailController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
-    bool _rememberMe = false;
-    bool _obscurePassword = true;
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    bool rememberMe = false;
+    bool obscurePassword = true;
 
     return BlocProvider(
       create: (_) => getIt<LoginCubit>(),
@@ -70,13 +70,13 @@ class LoginScreen extends StatelessWidget {
             body: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Email Field
                     TextFormField(
-                      controller: _emailController,
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -102,8 +102,8 @@ class LoginScreen extends StatelessWidget {
                     StatefulBuilder(
                       builder: (context, setState) {
                         return TextFormField(
-                          controller: _passwordController,
-                          obscureText: _obscurePassword,
+                          controller: passwordController,
+                          obscureText: obscurePassword,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Password is required';
@@ -119,13 +119,13 @@ class LoginScreen extends StatelessWidget {
                             hintText: 'Enter your password',
                             suffixIcon: IconButton(
                               icon: Icon(
-                                _obscurePassword
+                                obscurePassword
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
                                 color: const Color(0xff535353),
                               ),
                               onPressed: () => setState(
-                                () => _obscurePassword = !_obscurePassword,
+                                () => obscurePassword = !obscurePassword,
                               ),
                             ),
                           ),
@@ -142,10 +142,10 @@ class LoginScreen extends StatelessWidget {
                             StatefulBuilder(
                               builder: (context, setState) {
                                 return Checkbox(
-                                  value: _rememberMe,
+                                  value: rememberMe,
                                   activeColor: const Color(0xff02369C),
                                   onChanged: (val) => setState(
-                                    () => _rememberMe = val ?? false,
+                                    () => rememberMe = val ?? false,
                                   ),
                                 );
                               },
@@ -184,11 +184,11 @@ class LoginScreen extends StatelessWidget {
                         onPressed: isLoading
                             ? null
                             : () {
-                                if (_formKey.currentState!.validate()) {
+                                if (formKey.currentState!.validate()) {
                                   context.read<LoginCubit>().login(
-                                    email: _emailController.text.trim(),
-                                    password: _passwordController.text.trim(),
-                                    rememberMe: _rememberMe,
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text.trim(),
+                                    rememberMe: rememberMe,
                                   );
                                 }
                               },

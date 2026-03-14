@@ -5,7 +5,6 @@ import '../../../../../config/base_response/base_response.dart';
 import '../../domain/entity/login_entity.dart';
 import '../../domain/repositories/login_repository.dart';
 import '../datasources/login_remote_datasource.dart';
-import '../models/login_model.dart';
 
 @Injectable(as: LoginRepository)
 class AuthRepositoryImpl implements LoginRepository {
