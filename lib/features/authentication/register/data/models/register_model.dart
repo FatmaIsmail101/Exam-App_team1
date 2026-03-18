@@ -29,10 +29,12 @@ class RegisterModel {
 
 
   LoginEntity toEntity() {
+    if (user == null) {
+      throw Exception('User data is null');
+    }
     return LoginEntity(
       token: token!,
       user: user!.toEntity(),
     );
   }
 }
-

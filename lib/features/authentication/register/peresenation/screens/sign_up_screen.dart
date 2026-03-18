@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,27 +5,44 @@ import '../../../../../config/di/di.dart';
 import '../../../../../core/routes/routes_name.dart';
 import '../../../../../core/theme/text/text_theme_app.dart';
 import '../../data/models/register_request_model.dart';
-import '../cubit/cubit.dart';
-import '../cubit/state.dart';
+import '../cubit/register_cubit.dart';
+import '../cubit/register_state.dart';
 
-class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _usernameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _phoneController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final _usernameController = TextEditingController();
-    final _firstNameController = TextEditingController();
-    final _lastNameController = TextEditingController();
-    final _emailController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _confirmPasswordController = TextEditingController();
-    final _phoneController = TextEditingController();
-
-    final _formKey = GlobalKey<FormState>();
-
-    bool _obscurePassword = true;
-    bool _obscureConfirmPassword = true;
-
     return BlocProvider(
       create: (_) => getIt<RegisterCubit>(),
       child: BlocConsumer<RegisterCubit, RegisterState>(
@@ -150,70 +166,62 @@ class SignupScreen extends StatelessWidget {
                     SizedBox(height: 16.h),
 
                     /// Password
-                    StatefulBuilder(
-                      builder: (context, setState) {
-                        return TextFormField(
-                          controller: _passwordController,
-                          obscureText: _obscurePassword,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Password is required';
-                            }
-                            if (value.length < 6) {
-                              return 'At least 6 characters';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            hintText: 'Enter password',
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: const Color(0xff535353),
-                              ),
-                              onPressed: () => setState(
-                                    () => _obscurePassword = !_obscurePassword,
-                              ),
-                            ),
-                          ),
-                        );
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password is required';
+                        }
+                        if (value.length < 6) {
+                          return 'At least 6 characters';
+                        }
+                        return null;
                       },
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        hintText: 'Enter password',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color: const Color(0xff535353),
+                          ),
+                          onPressed: () => setState(
+                                () => _obscurePassword = !_obscurePassword,
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(height: 16.h),
 
                     /// Confirm Password
-                    StatefulBuilder(
-                      builder: (context, setState) {
-                        return TextFormField(
-                          controller: _confirmPasswordController,
-                          obscureText: _obscureConfirmPassword,
-                          validator: (value) {
-                            if (value != _passwordController.text) {
-                              return 'Passwords do not match';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Confirm password',
-                            hintText: 'Confirm password',
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscureConfirmPassword
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: const Color(0xff535353),
-                              ),
-                              onPressed: () => setState(
-                                    () => _obscureConfirmPassword =
-                                !_obscureConfirmPassword,
-                              ),
-                            ),
-                          ),
-                        );
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      validator: (value) {
+                        if (value != _passwordController.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
                       },
+                      decoration: InputDecoration(
+                        labelText: 'Confirm password',
+                        hintText: 'Confirm password',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureConfirmPassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color: const Color(0xff535353),
+                          ),
+                          onPressed: () => setState(
+                                () => _obscureConfirmPassword =
+                            !_obscureConfirmPassword,
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(height: 16.h),
 

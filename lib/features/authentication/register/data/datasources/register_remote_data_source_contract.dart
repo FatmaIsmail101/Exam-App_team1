@@ -3,17 +3,8 @@ import 'package:exam_app_elevate/features/authentication/register/data/models/re
 import 'package:exam_app_elevate/features/authentication/register/data/models/register_request_model.dart';
 import 'package:injectable/injectable.dart';
 
-abstract class RegisterRemoteDataSource {
+abstract class RegisterRemoteDataSourceContract {
   Future<RegisterModel> register(RegisterRequestModel request);
 }
 
-@Injectable(as: RegisterRemoteDataSource)
-class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
-  final RegisterApi api;
-  RegisterRemoteDataSourceImpl(this.api);
 
-  @override
-  Future<RegisterModel> register(RegisterRequestModel request) {
-    return api.register(request);
-  }
-}

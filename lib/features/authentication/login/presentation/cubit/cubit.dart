@@ -7,7 +7,7 @@ import '../../../../../core/network/storage/secure_storage_service.dart';
 import '../../domain/entity/login_entity.dart';
 import '../../domain/repositories/login_repository.dart';
 
-// cubit.dart
+// register_cubit.dart
 @injectable
 class LoginCubit extends Cubit<LoginState> {
   final LoginRepository _repository;

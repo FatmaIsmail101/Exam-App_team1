@@ -1,4 +1,4 @@
-// state.dart
+// register_state.dart
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entity/login_entity.dart';
