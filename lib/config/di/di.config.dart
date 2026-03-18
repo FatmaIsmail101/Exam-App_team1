@@ -15,30 +15,14 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/authentication/forget_password/api/forget_password_client.dart'
     as _i627;
-import '../../features/authentication/forget_password/data/data_source/forget_password_data_source/forget_password_data_source_contract.dart'
-    as _i667;
-import '../../features/authentication/forget_password/data/data_source/forget_password_data_source/forget_password_data_source_impl.dart'
-    as _i76;
-import '../../features/authentication/forget_password/data/data_source/reset_password/reset_password_data_source_contract.dart'
-    as _i227;
-import '../../features/authentication/forget_password/data/data_source/reset_password/reset_password_data_source_impl.dart'
-    as _i660;
-import '../../features/authentication/forget_password/data/data_source/verify_email_data_source/verify_email_data_source_contract.dart'
-    as _i808;
-import '../../features/authentication/forget_password/data/data_source/verify_email_data_source/verify_email_data_source_impl.dart'
-    as _i649;
-import '../../features/authentication/forget_password/data/repository/forget_password_repo/forget_password_repo_impl.dart'
-    as _i759;
-import '../../features/authentication/forget_password/data/repository/reset_password_repo/reset_password_repo_impl.dart'
-    as _i670;
-import '../../features/authentication/forget_password/data/repository/verify_email_repo/verify_email_repo_impl.dart'
-    as _i753;
-import '../../features/authentication/forget_password/domain/repository/forget_password_repo/forget_password_repo_contract.dart'
-    as _i387;
-import '../../features/authentication/forget_password/domain/repository/reset_password_repo/reset_password_repo_contract.dart'
-    as _i853;
-import '../../features/authentication/forget_password/domain/repository/verify_email_repo/verify_email_repo_contract.dart'
-    as _i62;
+import '../../features/authentication/forget_password/data/data_source/forget_password_data_source_contract.dart'
+    as _i453;
+import '../../features/authentication/forget_password/data/data_source/forget_password_data_source_impl.dart'
+    as _i200;
+import '../../features/authentication/forget_password/data/repository/forget_password_repo_impl.dart'
+    as _i451;
+import '../../features/authentication/forget_password/domain/repository/forget_password_repo_contract.dart'
+    as _i702;
 import '../../features/authentication/forget_password/domain/use_case/forget_password_use_case.dart'
     as _i819;
 import '../../features/authentication/forget_password/domain/use_case/reset_password_use_case.dart'
@@ -73,15 +57,24 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i627.ForgetPasswordClient(gh<_i361.Dio>()),
     );
     gh.factory<_i405.LoginApi>(() => _i405.LoginApi(gh<_i361.Dio>()));
-    gh.factory<_i667.ForgetPasswordDataSourceContract>(
-      () => _i76.ForgetPasswordDataSourceImpl(
+    gh.factory<_i453.ForgetPasswordDataSourceContract>(
+      () => _i200.ForgetPasswordDataSourceImpl(
         client: gh<_i627.ForgetPasswordClient>(),
       ),
     );
-    gh.factory<_i387.ForgetPasswordRepoContract>(
-      () => _i759.ForgetPasswordRepoImpl(
-        gh<_i667.ForgetPasswordDataSourceContract>(),
+    gh.factory<_i702.ForgetPasswordRepoContract>(
+      () => _i451.ForgetPasswordRepoImpl(
+        gh<_i453.ForgetPasswordDataSourceContract>(),
       ),
+    );
+    gh.factory<_i819.ForgetPasswordUseCase>(
+      () => _i819.ForgetPasswordUseCase(gh<_i702.ForgetPasswordRepoContract>()),
+    );
+    gh.factory<_i973.ResetPasswordUseCase>(
+      () => _i973.ResetPasswordUseCase(gh<_i702.ForgetPasswordRepoContract>()),
+    );
+    gh.factory<_i402.VerifyEmailUseCase>(
+      () => _i402.VerifyEmailUseCase(gh<_i702.ForgetPasswordRepoContract>()),
     );
     gh.factory<_i658.LoginRemoteDataSource>(
       () => _i658.LoginRemoteDataSourceImpl(gh<_i405.LoginApi>()),
@@ -92,39 +85,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i532.LoginUseCase>(
       () => _i532.LoginUseCase(gh<_i1056.LoginRepository>()),
     );
-    gh.factory<_i227.ResetPasswordDataSourceContract>(
-      () => _i660.ResetPasswordDataSourceImpl(gh<_i627.ForgetPasswordClient>()),
-    );
-    gh.factory<_i808.VerifyEmailDataSourceContract>(
-      () => _i649.VerifyEmailDataSourceImpl(gh<_i627.ForgetPasswordClient>()),
-    );
-    gh.factory<_i853.ResetPasswordRepoContract>(
-      () => _i670.ResetPasswordRepoImpl(
-        gh<_i227.ResetPasswordDataSourceContract>(),
-      ),
-    );
-    gh.factory<_i62.VerifyEmailRepoContract>(
-      () =>
-          _i753.VerifyEmailRepoImpl(gh<_i808.VerifyEmailDataSourceContract>()),
-    );
-    gh.factory<_i819.ForgetPasswordUseCase>(
-      () => _i819.ForgetPasswordUseCase(gh<_i387.ForgetPasswordRepoContract>()),
-    );
-    gh.factory<_i844.LoginCubit>(
-      () => _i844.LoginCubit(gh<_i1056.LoginRepository>()),
-    );
-    gh.factory<_i973.ResetPasswordUseCase>(
-      () => _i973.ResetPasswordUseCase(gh<_i853.ResetPasswordRepoContract>()),
-    );
-    gh.factory<_i402.VerifyEmailUseCase>(
-      () => _i402.VerifyEmailUseCase(gh<_i62.VerifyEmailRepoContract>()),
-    );
     gh.factory<_i200.ForgetPasswordViewModel>(
       () => _i200.ForgetPasswordViewModel(
         gh<_i819.ForgetPasswordUseCase>(),
         gh<_i402.VerifyEmailUseCase>(),
         gh<_i973.ResetPasswordUseCase>(),
       ),
+    );
+    gh.factory<_i844.LoginCubit>(
+      () => _i844.LoginCubit(gh<_i1056.LoginRepository>()),
     );
     return this;
   }

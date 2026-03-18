@@ -4,8 +4,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:exam_app_elevate/config/secure/flutter_secure_storage.dart';
-import 'package:exam_app_elevate/core/values/app_keys.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/data/data_source/forget_password_data_source_contract.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/data/models/request_model/forget_password_request.dart';
 import 'package:injectable/injectable.dart';
@@ -33,7 +31,6 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSourceContract {
   ) async {
     try {
       final response = await client.forgetPassword(request);
-      CashingFlutterSecureStorage.saveToken(AppKeys.email, request.email ?? "");
       // لو الـ API رجع 200/201
       return SuccessBaseResponse<ForgetPasswordResponse>(data: response);
     } on DioException catch (e) {
@@ -47,9 +44,7 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSourceContract {
         code: serverCode,
       );
     } on TimeoutException catch (e) {
-      talker.warning('The pizza is over 😥');
       talker.error(e.message);
-      talker.debug('Thinking about order new one 🤔');
       return ErrorBaseResponse<ForgetPasswordResponse>(
         message: e.message ?? "Timeout Exception",
       );
@@ -65,10 +60,7 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSourceContract {
   ) async {
     try {
       final response = await client.resetPassword(request);
-      CashingFlutterSecureStorage.saveToken(
-        AppKeys.token,
-        response.token ?? "",
-      );
+
       return SuccessBaseResponse<AuthBaseResponse>(data: response);
     } on DioException catch (e) {
       return ErrorBaseResponse<AuthBaseResponse>(

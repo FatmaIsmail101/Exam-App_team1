@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../core/values/app_keys.dart';
+import '../../core/values/secure_storage_keys.dart';
 
 class CashingFlutterSecureStorage {
   static late FlutterSecureStorage storage;
@@ -10,7 +10,7 @@ class CashingFlutterSecureStorage {
   }
 
   static Future<void> saveToken(String token, String value) async {
-    await storage.write(key: AppKeys.token, value: value);
+    await storage.write(key: SecureStorageKeys.token, value: value);
   }
 
   static Future<String?> getToken(String key) async {
