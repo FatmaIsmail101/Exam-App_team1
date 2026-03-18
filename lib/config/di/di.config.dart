@@ -58,6 +58,17 @@ import '../../features/authentication/login/domain/usecases/login_usecase.dart'
     as _i532;
 import '../../features/authentication/login/presentation/cubit/cubit.dart'
     as _i844;
+import '../../features/authentication/register/api/register_api.dart' as _i101;
+import '../../features/authentication/register/data/datasources/register_remote_data_source.dart'
+    as _i789;
+import '../../features/authentication/register/data/repositories/register_repositories_impl.dart'
+    as _i7;
+import '../../features/authentication/register/domain/repositories/register_repositories_contract.dart'
+    as _i704;
+import '../../features/authentication/register/domain/use_case/register_usecase.dart'
+    as _i537;
+import '../../features/authentication/register/peresenation/cubit/cubit.dart'
+    as _i28;
 import '../dio/dio_module.dart' as _i977;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -73,10 +84,20 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i627.ForgetPasswordClient(gh<_i361.Dio>()),
     );
     gh.factory<_i405.LoginApi>(() => _i405.LoginApi(gh<_i361.Dio>()));
+    gh.factory<_i101.RegisterApi>(() => _i101.RegisterApi(gh<_i361.Dio>()));
+    gh.factory<_i537.RegisterUseCase>(
+      () => _i537.RegisterUseCase(gh<_i704.RegisterRepositoryContract>()),
+    );
+    gh.factory<_i789.RegisterRemoteDataSource>(
+      () => _i789.RegisterRemoteDataSourceImpl(gh<_i101.RegisterApi>()),
+    );
     gh.factory<_i667.ForgetPasswordDataSourceContract>(
       () => _i76.ForgetPasswordDataSourceImpl(
         client: gh<_i627.ForgetPasswordClient>(),
       ),
+    );
+    gh.factory<_i7.RegisterRepositoriesImpl>(
+      () => _i7.RegisterRepositoriesImpl(gh<_i789.RegisterRemoteDataSource>()),
     );
     gh.factory<_i387.ForgetPasswordRepoContract>(
       () => _i759.ForgetPasswordRepoImpl(
@@ -102,6 +123,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i670.ResetPasswordRepoImpl(
         gh<_i227.ResetPasswordDataSourceContract>(),
       ),
+    );
+    gh.factory<_i28.RegisterCubit>(
+      () => _i28.RegisterCubit(gh<_i537.RegisterUseCase>()),
     );
     gh.factory<_i62.VerifyEmailRepoContract>(
       () =>
