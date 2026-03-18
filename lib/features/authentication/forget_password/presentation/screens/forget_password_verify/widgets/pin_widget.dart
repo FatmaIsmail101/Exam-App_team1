@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../../data/models/verify_email/verify_email_request.dart';
+import '../../../../../../../core/values/app_strings.dart';
+import '../../../../data/models/request_model/verify_email_request.dart';
 import '../../../view_model/forget_password_view_model_cubit.dart';
 import '../../../view_model/states/forget_password_event.dart';
 
@@ -40,14 +41,14 @@ class PinWidget extends StatelessWidget {
                           Icon(Icons.error, color: Colors.red, size: 16),
                           SizedBox(width: 4),
                           Text(
-                            errorText ?? 'Error',
+                            errorText ?? AppStrings.emailVerificationError,
                             style: TextStyle(color: Colors.red),
                           ),
                         ]
                       : [],
                 ),
                 length: 6,
-                errorText: hasError ? "Invalid code, please try again" : null,
+                errorText: hasError ? AppStrings.emailVerificationError : null,
                 onCompleted: (pin) {
                   context.read<ForgetPasswordViewModel>().doIntent(
                     event: VerifyEmailEvent(VerifyEmailRequest(code: pin)),
@@ -88,7 +89,7 @@ class PinWidget extends StatelessWidget {
                     fontWeight: .w500,
                   ),
                   filledFillColor: Color(0xffDFE7F7),
-                  obscuringCharacter: "*",
+                  obscuringCharacter: AppStrings.verificationSymbol,
                 ),
               ),
             ),

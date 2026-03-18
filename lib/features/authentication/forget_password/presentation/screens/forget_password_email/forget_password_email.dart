@@ -1,4 +1,4 @@
-import 'package:exam_app_elevate/core/notification/notification.dart';
+import 'package:exam_app_elevate/core/widgets/custom_snack_bar.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/presentation/screens/widgets/forget_password_block.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/presentation/screens/widgets/forget_password_text_field.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/values/app_strings.dart';
-import '../../../data/models/forget_password/forget_password_request.dart';
+import '../../../data/models/request_model/forget_password_request.dart';
 import '../../view_model/forget_password_view_model_cubit.dart';
 import '../../view_model/states/forget_password_event.dart';
 
@@ -45,7 +45,7 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
           if (state.forgetePasswordState.errorMessage == null &&
               state.forgetePasswordState.data == null &&
               state.forgetePasswordState.isLoading == true) {
-            NotificationBar.showNotification(
+            CustomSnackbar.showSnackBar(
               message: "message",
               type: .warning,
               context: context,
@@ -54,7 +54,7 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
           if (state.forgetePasswordState.errorMessage == null &&
               state.forgetePasswordState.data != null &&
               state.forgetePasswordState.isLoading == false) {
-            NotificationBar.showNotification(
+            CustomSnackbar.showSnackBar(
               message: state.forgetePasswordState.data?.info ?? "",
               type: .success,
               context: context,
@@ -73,7 +73,7 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
           if (state.forgetePasswordState.errorMessage != null &&
               state.forgetePasswordState.data == null &&
               state.forgetePasswordState.isLoading == false) {
-            NotificationBar.showNotification(
+            CustomSnackbar.showSnackBar(
               message: state.forgetePasswordState.errorMessage!,
               type: .failure,
               context: context,
@@ -124,7 +124,7 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
                     ),
                   );
                 } else if (widget.controller.text.isEmpty) {
-                  NotificationBar.showNotification(
+                  CustomSnackbar.showSnackBar(
                     message: AppStrings.textFieldEmpty,
                     type: .warning,
                     context: context,

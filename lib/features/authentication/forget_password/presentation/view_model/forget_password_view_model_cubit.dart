@@ -1,5 +1,5 @@
 import 'package:exam_app_elevate/features/authentication/auth_response/auth_base_response.dart';
-import 'package:exam_app_elevate/features/authentication/forget_password/data/models/forget_password/forget_password_request.dart';
+import 'package:exam_app_elevate/features/authentication/forget_password/data/models/request_model/forget_password_request.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/domain/use_case/forget_password_use_case.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/presentation/view_model/states/forget_password_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,10 +8,10 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import '../../../../../config/base_response/base_response.dart';
 import '../../../../../config/base_state/base_state.dart';
-import '../../data/models/forget_password/forget_password_response.dart';
-import '../../data/models/reset_password/reset_password_request.dart';
-import '../../data/models/verify_email/verify_email_request.dart';
-import '../../data/models/verify_email/verify_email_response.dart';
+import '../../data/models/request_model/reset_password_request.dart';
+import '../../data/models/request_model/verify_email_request.dart';
+import '../../data/models/response_model/forget_password_response.dart';
+import '../../data/models/response_model/verify_email_response.dart';
 import '../../domain/use_case/reset_password_use_case.dart';
 import '../../domain/use_case/verify_email_use_case.dart';
 

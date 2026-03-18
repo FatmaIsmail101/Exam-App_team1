@@ -1,13 +1,13 @@
-import 'package:exam_app_elevate/features/authentication/forget_password/domain/repository/reset_password_repo/reset_password_repo_contract.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../config/base_response/base_response.dart';
 import '../../../auth_response/auth_base_response.dart';
-import '../../data/models/reset_password/reset_password_request.dart';
+import '../../data/models/request_model/reset_password_request.dart';
+import '../repository/forget_password_repo_contract.dart';
 
 @injectable
 class ResetPasswordUseCase {
-  ResetPasswordRepoContract repo;
+  ForgetPasswordRepoContract repo;
 
   ResetPasswordUseCase(this.repo);
 

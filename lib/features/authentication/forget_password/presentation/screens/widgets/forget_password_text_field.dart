@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @immutable
 class ForgetPasswordTextField extends StatefulWidget {
-  ForgetPasswordTextField({
+  const ForgetPasswordTextField({
     super.key,
     required this.hintText,
     required this.labelText,

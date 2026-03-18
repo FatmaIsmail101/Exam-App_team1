@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../../../../core/notification/notification.dart';
 import '../../../../../../core/values/app_strings.dart';
-import '../../../data/models/forget_password/forget_password_request.dart';
+import '../../../../../../core/widgets/custom_snack_bar.dart';
+import '../../../data/models/request_model/forget_password_request.dart';
 import '../../view_model/forget_password_view_model_cubit.dart';
 import '../../view_model/states/forget_password_event.dart';
 import '../widgets/forget_password_block.dart';
@@ -34,7 +34,7 @@ class ForgetPasswordVerify extends StatelessWidget {
         if (state.verifyEmailState.data != null &&
             state.verifyEmailState.errorMessage == null &&
             state.verifyEmailState.isLoading == false) {
-          NotificationBar.showNotification(
+          CustomSnackbar.showSnackBar(
             message: state.verifyEmailState.data?.status ?? "",
             type: .success,
             context: context,
@@ -47,7 +47,7 @@ class ForgetPasswordVerify extends StatelessWidget {
         } else if (state.verifyEmailState.data == null &&
             state.verifyEmailState.errorMessage != null &&
             state.verifyEmailState.isLoading == false) {
-          NotificationBar.showNotification(
+          CustomSnackbar.showSnackBar(
             message: state.verifyEmailState.errorMessage ?? "",
             type: .failure,
             context: context,
@@ -106,37 +106,3 @@ class ForgetPasswordVerify extends StatelessWidget {
     );
   }
 }
-
-// .then((value) {
-//   final viewModel = context
-//       .watch<ForgetPasswordViewModel>();
-//   if (viewModel.state.authBaseResponse.data != null &&
-//       viewModel.state.authBaseResponse.errorMessage ==
-//           null &&
-//       viewModel.state.authBaseResponse.isLoading ==
-//           false) {
-//     NotificationBar.showNotification(
-//       message:
-//           viewModel.state.authBaseResponse.data?.info ??
-//           "",
-//       type: .success, // استخدمي اسم الـ Enum الصح عندك
-//       context: context,
-//     );
-//   } else if (viewModel.state.authBaseResponse.data ==
-//           null &&
-//       viewModel.state.authBaseResponse.errorMessage !=
-//           null &&
-//       viewModel.state.authBaseResponse.isLoading ==
-//           false) {
-//     NotificationBar.showNotification(
-//       message:
-//           viewModel
-//               .state
-//               .authBaseResponse
-//               .errorMessage ??
-//           "",
-//       type: .failure,
-//       context: context,
-//     );
-//   }
-// });

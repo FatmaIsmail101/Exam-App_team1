@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../core/notification/notification.dart';
 import '../../../../../../core/utils/text_field_validation.dart';
 import '../../../../../../core/values/app_strings.dart';
-import '../../../data/models/reset_password/reset_password_request.dart';
+import '../../../../../../core/widgets/custom_snack_bar.dart';
+import '../../../data/models/request_model/reset_password_request.dart';
 import '../../view_model/states/forget_password_event.dart';
 import '../widgets/forget_password_block.dart';
 import '../widgets/forget_password_text_field.dart';
@@ -48,7 +48,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         if (state.resetPasswordState.isLoading == false &&
             state.resetPasswordState.data != null &&
             state.resetPasswordState.errorMessage == null) {
-          NotificationBar.showNotification(
+          CustomSnackbar.showSnackBar(
             message: state.resetPasswordState.data?.message ?? "",
             type: .success,
             context: context,
@@ -70,7 +70,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         } else if (state.resetPasswordState.isLoading == false &&
             state.resetPasswordState.data == null &&
             state.resetPasswordState.errorMessage != null) {
-          NotificationBar.showNotification(
+          CustomSnackbar.showSnackBar(
             message: state.resetPasswordState.errorMessage ?? "",
             type: .failure,
             context: context,
@@ -115,7 +115,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 // 1. التأكد إن الحقول مش فاضية
                 if (passwordController.text.isEmpty ||
                     confirmPasswordController.text.isEmpty) {
-                  NotificationBar.showNotification(
+                  CustomSnackbar.showSnackBar(
                     message: AppStrings.textFieldEmpty,
                     type: .warning,
                     context: context,
@@ -124,20 +124,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 }
                 // 2. التأكد إن كلمة السر متطابقة
                 if (passwordController.text != confirmPasswordController.text) {
-                  NotificationBar.showNotification(
-                    message: "The Password isn't match",
+                  CustomSnackbar.showSnackBar(
+                    message: AppStrings.newPasswordMessage,
                     type: .warning,
                     context: context,
                   );
                   return;
                 }
 
-                // if (passwordController.text.isNotEmpty ||
-                //     confirmPasswordController.text.isNotEmpty &&
-                //         passwordController.text ==
-                //             confirmPasswordController.text) {
-                // 3. لو كله تمام، بنبعت الـ Event
-                // مفيش داعي نبعت الإيميل هنا، الـ ViewModel هيسحبه من الـ State زي ما اتفقنا
+
                 context.read<ForgetPasswordViewModel>().doIntent(
                   event: ResetPasswordEvent(
                     ResetPasswordRequest(password: passwordController.text),
