@@ -1,13 +1,15 @@
+import 'dart:async';
+
 import 'package:exam_app_elevate/features/authentication/auth_response/auth_base_response.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/data/models/request_model/forget_password_request.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/domain/use_case/forget_password_use_case.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/presentation/view_model/states/forget_password_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
 import '../../../../../config/base_response/base_response.dart';
 import '../../../../../config/base_state/base_state.dart';
+import '../../../../../main.dart';
 import '../../data/models/request_model/reset_password_request.dart';
 import '../../data/models/request_model/verify_email_request.dart';
 import '../../data/models/response_model/forget_password_response.dart';
@@ -22,7 +24,7 @@ class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
   final ForgetPasswordUseCase _sendEmailuUseCase;
   final VerifyEmailUseCase _verifyEmailUseCase;
   final ResetPasswordUseCase _resetPasswordUseCase;
-  final talker = Talker();
+  Timer? _timer;
   ForgetPasswordViewModel(
     this._sendEmailuUseCase,
     this._verifyEmailUseCase,
@@ -41,6 +43,24 @@ class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
         await _resetPassword(event);
         break;
     }
+  }
+
+  void _startTimerOTP() {
+    _timer?.cancel();
+    emit(state.copyWith(isResendEnabled: false, timerValue: 600));
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (isClosed) {
+        _timer?.cancel(); // لو الـ Cubit اتقفل، وقف التايمر فوراً
+        return;
+      }
+      if (state.timerValue == 0) {
+        _timer?.cancel();
+
+        emit(state.copyWith(isResendEnabled: true));
+      } else {
+        emit(state.copyWith(timerValue: state.timerValue! - 1));
+      }
+    });
   }
 
   Future<void> _sendEmail(ForgetPasswordRequest request) async {
@@ -66,6 +86,7 @@ class ForgetPasswordViewModel extends Cubit<ForgetPasswordState> {
             ),
           ),
         );
+        _startTimerOTP();
         talker.info(request.email);
         break;
       case ErrorBaseResponse<ForgetPasswordResponse>():

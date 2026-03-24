@@ -3,7 +3,7 @@ class BaseState<T> {
   final String? errorMessage;
   final T? data;
 
-  const BaseState({this.isLoading = false, this.errorMessage, this.data});
+  BaseState({this.isLoading = false, this.errorMessage, this.data});
 
   BaseState<T> copyWith({bool? isLoading, String? errorMessage, T? data}) {
     return BaseState<T>(

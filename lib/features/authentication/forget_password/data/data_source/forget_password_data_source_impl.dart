@@ -7,9 +7,9 @@ import 'package:dio/dio.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/data/data_source/forget_password_data_source_contract.dart';
 import 'package:exam_app_elevate/features/authentication/forget_password/data/models/request_model/forget_password_request.dart';
 import 'package:injectable/injectable.dart';
-import 'package:talker/talker.dart';
 
 import '../../../../../config/base_response/base_response.dart';
+import '../../../../../main.dart';
 import '../../../auth_response/auth_base_response.dart';
 import '../../api/forget_password_client.dart';
 import '../models/request_model/reset_password_request.dart';
@@ -22,8 +22,6 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSourceContract {
   ForgetPasswordClient client;
 
   ForgetPasswordDataSourceImpl({required this.client});
-
-  final talker = Talker();
 
   @override
   Future<BaseResponse<ForgetPasswordResponse>> forgetPassword(

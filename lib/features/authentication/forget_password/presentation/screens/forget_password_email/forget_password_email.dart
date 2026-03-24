@@ -46,7 +46,7 @@ class _ForgetPasswordEmailState extends State<ForgetPasswordEmail> {
               state.forgetePasswordState.data == null &&
               state.forgetePasswordState.isLoading == true) {
             CustomSnackbar.showSnackBar(
-              message: "message",
+              message: AppStrings.otpSend,
               type: .warning,
               context: context,
             );

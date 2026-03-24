@@ -1,4 +1,5 @@
 import 'package:exam_app_elevate/features/authentication/forget_password/presentation/screens/forget_password_verify/widgets/pin_widget.dart';
+import 'package:exam_app_elevate/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,10 +28,9 @@ class ForgetPasswordVerify extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final vm = context.read<ForgetPasswordViewModel>();
-    final response = vm.state.verifyEmailState.data;
     return BlocListener<ForgetPasswordViewModel, ForgetPasswordState>(
       listener: (context, state) {
+        talker.info("I'm BlocListener");
         if (state.verifyEmailState.data != null &&
             state.verifyEmailState.errorMessage == null &&
             state.verifyEmailState.isLoading == false) {
@@ -55,6 +55,10 @@ class ForgetPasswordVerify extends StatelessWidget {
           pinInputController.clear();
         }
       },
+      listenWhen: (previous, current) {
+        return previous.verifyEmailState != current.verifyEmailState ||
+            previous.forgetePasswordState != current.forgetePasswordState;
+      },
       child: Column(
         // spacing: 20.h,
         children: [
@@ -68,41 +72,76 @@ class ForgetPasswordVerify extends StatelessWidget {
             pinController: pinInputController,
           ),
           SizedBox(height: 32.h),
-          Text.rich(
-            TextSpan(
-              children: [
+          BlocBuilder<ForgetPasswordViewModel, ForgetPasswordState>(
+            buildWhen: (previous, current) =>
+                previous.timerValue != current.timerValue ||
+                previous.isResendEnabled != current.isResendEnabled,
+            builder: (context, state) {
+              // ممكن تخلي الـ 600 دي متغير عندك أو ثابت
+              const int totalTime = 600;
+              bool isHalfTime = state.timerValue! <= (totalTime / 2);
+              talker.info("I'm BlocBuilder");
+              return Text.rich(
                 TextSpan(
-                  text: AppStrings.verifyText,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: Color(0xff0F0F0F),
-                  ),
+                  children: [
+                    TextSpan(
+                      text: AppStrings.verifyText,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: Color(0xff0F0F0F),
+                      ),
+                    ),
+                    TextSpan(
+                      text: state.timerValue == 0
+                          ? AppStrings.resend
+                          : formatDuration(state?.timerValue ?? 0),
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: isHalfTime
+                            ? Color(0xffCC1010)
+                            : Color(0xff02369C),
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        decorationColor: const Color(0xff02369C),
+                        // تأكيد لون الخط نفسه
+                        decorationStyle: TextDecorationStyle.solid,
+                        height: 6,
+                      ),
+                      // هنا تقدر تضيف الـ recognizer عشان لما يضغط يعيد الإرسال
+                      recognizer: state.isResendEnabled == true
+                          ? (TapGestureRecognizer()
+                              ..onTap = () {
+                                context
+                                    .read<ForgetPasswordViewModel>()
+                                    .doIntent(
+                                      event: SendEmailEvent(
+                                        ForgetPasswordRequest(
+                                          email: controller.text,
+                                        ),
+                                      ),
+                                    );
+                              })
+                          : null,
+                    ),
+                  ],
                 ),
-                TextSpan(
-                  text: AppStrings.resend,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: Color(0xff02369C),
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                    decorationColor: const Color(0xff02369C),
-                    // تأكيد لون الخط نفسه
-                    decorationStyle: TextDecorationStyle.solid,
-                    height: 6,
-                  ),
-                  // هنا تقدر تضيف الـ recognizer عشان لما يضغط يعيد الإرسال
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      context.read<ForgetPasswordViewModel>().doIntent(
-                        event: SendEmailEvent(
-                          ForgetPasswordRequest(email: controller.text),
-                        ),
-                      );
-                    },
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),
     );
+  }
+
+  String formatDuration(int totalSeconds) {
+    // بنقسم على 60 عشان نعرف فيه كام دقيقة
+    int minutes = totalSeconds ~/ 60;
+
+    // بنجيب الباقي من القسمة عشان نعرف الثواني
+    int seconds = totalSeconds % 60;
+
+    // padLeft(2, '0') معناها: لو الرقم خانة واحدة (مثلاً 5) حط جنبه 0 عشان يبقى 05
+    String minutesStr = minutes.toString().padLeft(2, '0');
+    String secondsStr = seconds.toString().padLeft(2, '0');
+
+    return "$minutesStr:$secondsStr";
   }
 }

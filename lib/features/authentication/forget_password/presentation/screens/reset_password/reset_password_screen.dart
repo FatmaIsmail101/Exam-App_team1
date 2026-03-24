@@ -31,15 +31,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final confirmPasswordController = TextEditingController();
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    confirmPasswordController.dispose();
-    passwordController.dispose();
-    pageController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
@@ -76,6 +67,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             context: context,
           );
         }
+      },
+      listenWhen: (previous, current) {
+        return previous.resetPasswordState != current.resetPasswordState;
       },
       child: Form(
         key: formKey,
@@ -131,7 +125,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   );
                   return;
                 }
-
 
                 context.read<ForgetPasswordViewModel>().doIntent(
                   event: ResetPasswordEvent(

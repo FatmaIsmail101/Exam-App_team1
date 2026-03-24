@@ -2,6 +2,8 @@ part of '../forget_password_view_model_cubit.dart';
 
 class ForgetPasswordState {
   final String? email;
+  final int? timerValue; // الثواني المتبقية
+  final bool? isResendEnabled; // هل زرار إعادة الإرسال متاح؟
   BaseState<ForgetPasswordResponse> forgetePasswordState =
       BaseState<ForgetPasswordResponse>(
         isLoading: true,
@@ -21,6 +23,8 @@ class ForgetPasswordState {
   );
 
   ForgetPasswordState({
+    this.timerValue = 0,
+    this.isResendEnabled = true,
     this.email,
     required this.forgetePasswordState,
     required this.verifyEmailState,
@@ -28,12 +32,16 @@ class ForgetPasswordState {
   });
 
   ForgetPasswordState copyWith({
+    int? timerValue,
+    bool? isResendEnabled,
     BaseState<ForgetPasswordResponse>? authBaseResponse,
     BaseState<VerifyEmailResponse>? verifyEmailResponse,
     BaseState<AuthBaseResponse>? resetPasswordResponse,
     String? email,
   }) {
     return ForgetPasswordState(
+      timerValue: timerValue ?? this.timerValue,
+      isResendEnabled: isResendEnabled ?? this.isResendEnabled,
       forgetePasswordState: authBaseResponse ?? forgetePasswordState,
       verifyEmailState: verifyEmailResponse ?? verifyEmailState,
       resetPasswordState: resetPasswordResponse ?? resetPasswordState,
@@ -43,6 +51,8 @@ class ForgetPasswordState {
 
   static ForgetPasswordState initial() {
     return ForgetPasswordState(
+      timerValue: 0,
+      isResendEnabled: true,
       email: null,
       forgetePasswordState: BaseState<ForgetPasswordResponse>(
         isLoading: true,

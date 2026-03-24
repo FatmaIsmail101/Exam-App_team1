@@ -15,6 +15,7 @@ abstract class AppStrings {
       "Please enter your code that send to your email address";
   static const String textFieldEmpty = "This field can't be empty";
   static const String verificationSymbol = "*";
+  static const String otpSend = "The OTP Message is sent";
   static const String verifyText = "Didn't receive code? ";
   static const String resetPassword = "Reset password";
   static const String resetPasswordDescription =
