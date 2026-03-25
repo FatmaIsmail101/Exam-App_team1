@@ -3,7 +3,8 @@ import 'package:exam_app_elevate/features/authentication/login/presentation/cubi
 import 'package:injectable/injectable.dart';
 
 import '../../../../../config/base_response/base_response.dart';
-import '../../../../../core/network/storage/secure_storage_service.dart';
+import '../../../../../config/secure/flutter_secure_storage.dart';
+import '../../../../../core/values/secure_storage_keys.dart';
 import '../../domain/entity/login_entity.dart';
 import '../../domain/repositories/login_repository.dart';
 
@@ -24,9 +25,12 @@ class LoginCubit extends Cubit<LoginState> {
 
     switch (response) {
       case SuccessBaseResponse<LoginEntity>():
-      // حفظ الـ token لو المستخدم فعل Remember Me
+        // حفظ الـ token لو المستخدم فعل Remember Me
         if (rememberMe) {
-          await SecureStorageService().writeToken(response.data!.token);
+          await CashingFlutterSecureStorage.save(
+            SecureStorageKeys.token,
+            response.data!.token,
+          );
         }
         emit(LoginSuccess(response.data!));
 
@@ -37,7 +41,7 @@ class LoginCubit extends Cubit<LoginState> {
           403 => 'You are not authorized',
           404 => 'Account not found',
           500 => 'Server error, please try again later',
-          _   => response.message ?? 'Unknown error occurred',
+          _ => response.message ?? 'Unknown error occurred',
         };
         emit(LoginError(message, code));
     }

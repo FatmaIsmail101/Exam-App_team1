@@ -93,7 +93,7 @@ class ForgetPasswordVerify extends StatelessWidget {
                     TextSpan(
                       text: state.timerValue == 0
                           ? AppStrings.resend
-                          : formatDuration(state?.timerValue ?? 0),
+                          : formatDuration(state.timerValue ?? 0),
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: isHalfTime
                             ? Color(0xffCC1010)

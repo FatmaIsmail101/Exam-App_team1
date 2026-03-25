@@ -5,5 +5,7 @@ abstract class RoutesName {
   static const String resetPassword = "resetPassword";
   static const String language = "language";
   static const String register = "signUp";
-  static const String exam = "exam";
+  static const String home = "home";
+  static const String examsScreen = "examsScreen";
+  static const String resultScreen = "resultScreen";
 }

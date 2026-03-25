@@ -27,6 +27,11 @@ abstract class AppStrings {
   static const String labelConfirmPassword = "Confirm Password";
   static const String resend = "Resend";
   static const String login = "Login";
-
   static const String register = "Register";
+  static const String question = "Question";
+  static const String to = "To";
+  static const String questionContent =
+      "Select the correctly punctuated sentence.";
+  static const String backButtonText = "Back";
+  static const String nextButtonText = "Next";
 }
