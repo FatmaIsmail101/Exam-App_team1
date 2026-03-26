@@ -1,7 +1,7 @@
 import 'package:exam_app_elevate/core/routes/routes_name.dart';
 import 'package:exam_app_elevate/core/values/app_strings.dart';
 import 'package:exam_app_elevate/core/values/icon_paths.dart';
-import 'package:exam_app_elevate/features/home/exams_questions/presentation/screens/widgets/question_block.dart';
+import 'package:exam_app_elevate/features/home/questions/presentation/screens/widgets/question_block.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

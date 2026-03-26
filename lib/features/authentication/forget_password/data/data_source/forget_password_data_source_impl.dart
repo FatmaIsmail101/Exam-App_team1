@@ -71,10 +71,7 @@ class ForgetPasswordDataSourceImpl implements ForgetPasswordDataSourceContract {
         code: 408,
       );
     } on SocketException catch (e) {
-      return ErrorBaseResponse<AuthBaseResponse>(
-        message: e.message ?? "",
-        code: 408,
-      );
+      return ErrorBaseResponse<AuthBaseResponse>(message: e.message, code: 408);
     }
   }
 

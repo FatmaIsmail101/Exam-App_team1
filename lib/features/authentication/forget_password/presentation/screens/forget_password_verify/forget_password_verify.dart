@@ -13,7 +13,6 @@ import '../../view_model/forget_password_view_model_cubit.dart';
 import '../../view_model/states/forget_password_event.dart';
 import '../widgets/forget_password_block.dart';
 
-@immutable
 class ForgetPasswordVerify extends StatelessWidget {
   ForgetPasswordVerify({
     super.key,

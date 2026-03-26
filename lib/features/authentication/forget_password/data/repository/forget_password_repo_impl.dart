@@ -52,11 +52,6 @@ class ForgetPasswordRepoImpl implements ForgetPasswordRepoContract {
           message: response.message,
           code: response.code,
         );
-      default:
-        return ErrorBaseResponse<AuthBaseResponse>(
-          message: "Something went wrong",
-          code: 500,
-        );
     }
   }
 
