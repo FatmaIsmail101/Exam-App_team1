@@ -8,8 +8,9 @@ class QuestionState {
         data: null,
         errorMessage: null,
       );
-
-  QuestionState({this.questionsState});
+  int? currentIndex;
+  int? time;
+  QuestionState({this.questionsState, this.currentIndex = 0, this.time});
 
   static QuestionState init() {
     return QuestionState(
@@ -18,10 +19,20 @@ class QuestionState {
         data: null,
         errorMessage: null,
       ),
+      currentIndex: 0,
+      time: 0,
     );
   }
 
-  QuestionState copyWith({BaseState<List<QuestionEntity>>? questionsState}) {
-    return QuestionState(questionsState: questionsState ?? this.questionsState);
+  QuestionState copyWith({
+    BaseState<List<QuestionEntity>>? questionsState,
+    int? currentIndex,
+    int? time,
+  }) {
+    return QuestionState(
+      questionsState: questionsState ?? this.questionsState,
+      currentIndex: currentIndex ?? this.currentIndex,
+      time: time ?? this.time,
+    );
   }
 }

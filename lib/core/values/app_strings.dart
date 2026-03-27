@@ -35,4 +35,5 @@ abstract class AppStrings {
   static const String backButtonText = "Back";
   static const String nextButtonText = "Next";
   static const String timeOutException = "Something went wrong";
+  static const String timeOutMessage = "Time out !!";
 }

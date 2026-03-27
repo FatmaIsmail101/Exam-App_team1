@@ -9,12 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/values/image_paths.dart';
+import '../../../../../main.dart';
 import '../view_model/question_event.dart';
 
 class ExamsScreen extends StatelessWidget {
   ExamsScreen({super.key});
   final PageController pageController = PageController();
-
+  int counterNum = 1;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -24,20 +26,39 @@ class ExamsScreen extends StatelessWidget {
             ..doIntent(getQuestionEvent("670070a830a3c3c1944a9c63")),
       child: BlocConsumer<QuestionCubit, QuestionState>(
         listener: (context, state) {
-          if (state.questionsState?.data?.first.duration == 0) {
+          if (state.time == 0) {
             showDialog(
               context: context,
               builder: (context) {
-                return AlertDialog(title: Text("Allow"));
+                return AlertDialog(
+                  title: Row(
+                    children: [
+                      Image.asset(ImagePaths.timeOut),
+                      Text(AppStrings.timeOutMessage),
+                    ],
+                  ),
+                );
               },
             );
           }
         },
         builder: (context, state) {
+          // 1. نجيب المدة الكلية من أول سؤال (بالدقائق) ونحولها لثواني
+          int totalDurationMinutes =
+              state.questionsState?.data?.first.duration ?? 0;
+          int totalSeconds = totalDurationMinutes * 60;
+
+          // 2. نحسب نص الوقت
+          int halfTime = totalSeconds ~/ 2;
+
+          // 3. نجيب الوقت الحالي من الـ State
+          int currentTime = state.time ?? 0;
+          talker.info(state.questionsState?.data?.length);
+
           if (state.questionsState?.isLoading == true &&
               state.questionsState?.data == null &&
               state.questionsState?.errorMessage == null) {
-            return Center(child: CircularProgressIndicator());
+            return Scaffold(body: Center(child: CircularProgressIndicator()));
           }
           if (state.questionsState?.errorMessage != null &&
               state.questionsState?.isLoading == false &&
@@ -64,8 +85,8 @@ class ExamsScreen extends StatelessWidget {
             return Center(child: Text("No Data"));
           }
           // حسابات الوقت
-          int currentDuration = state.questionsState?.data?.first.duration ?? 0;
-          int isHalf = 30;
+          int currentDuration = state.time ?? 0;
+          int isHalf = currentDuration ~/ 2;
 
           return Scaffold(
             resizeToAvoidBottomInset: true,
@@ -91,11 +112,11 @@ class ExamsScreen extends StatelessWidget {
                 Image.asset(IconPaths.timerIcon),
                 SizedBox(width: 6.w),
                 Text(
-                  state.questionsState?.data?.first.duration.toString() ?? "",
+                  _formatTime(currentTime),
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: state.questionsState?.data?.first.duration == isHalf
-                        ? Color(0xffCC1010)
-                        : Color(0xff11CE19),
+                    color: (currentTime <= halfTime && currentTime > 0)
+                        ? const Color(0xffCC1010) // الأحمر
+                        : const Color(0xff11CE19),
                   ),
                 ),
               ],
@@ -106,6 +127,7 @@ class ExamsScreen extends StatelessWidget {
                 spacing: 24.h,
                 children: [
                   QuestionBlock(
+                    counter: "${(state.currentIndex ?? 0) + 1}",
                     questionNum:
                         state.questionsState?.data?.first.numberOfQuestions
                             .toString() ??
@@ -115,7 +137,11 @@ class ExamsScreen extends StatelessWidget {
                     child: PageView.builder(
                       controller: pageController,
                       physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => Placeholder(),
+                      itemBuilder: (context, index) {
+                        talker.info(pageController.page);
+                        //counterNum = index + 1;
+                        return Placeholder();
+                      },
                       itemCount: state.questionsState?.data?.length,
                     ),
                   ),
@@ -134,13 +160,26 @@ class ExamsScreen extends StatelessWidget {
                           padding: .symmetric(horizontal: 65.w, vertical: 14.h),
                         ),
                         onPressed: () {
-                          if (pageController.hasClients &&
-                              pageController.page! > 0) {
-                            pageController.previousPage(
-                              // تعديل لـ previous
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.easeIn,
-                            );
+                          if (pageController.hasClients) {
+                            // 1. نجيب الصفحة الحالية
+                            int currentPage = pageController.page?.round() ?? 0;
+
+                            // 2. نتأكد إننا مش في أول صفحة (عشان نقدر نرجع)
+                            if (currentPage > 0) {
+                              int prevPageIndex =
+                                  currentPage - 1; // طرح مباشر وصريح
+
+                              // 3. نحرك الـ PageView
+                              pageController.previousPage(
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeIn,
+                              );
+
+                              // 4. نبلغ الـ Cubit بالـ Index الجديد (اللي هو الأصغر بـ 1)
+                              context.read<QuestionCubit>().doIntent(
+                                ChangePageEvent(prevPageIndex),
+                              );
+                            }
                           }
                         },
                         child: Text(
@@ -159,22 +198,28 @@ class ExamsScreen extends StatelessWidget {
                           ),
                           padding: .symmetric(horizontal: 65.w, vertical: 14.h),
                         ),
+                        // داخل زرار الـ Next
                         onPressed: () {
-                          // 1. أولاً: نتأكد إن الكنترولر متصل بالـ PageView وجاهز
                           if (pageController.hasClients) {
-                            // 2. نقارن الصفحة الحالية بآخر صفحة
-                            // ملاحظة: الـ page بترجع double، والـ maxScrollExtent بتقيس بالـ pixels
-                            // الأفضل نستخدم الـ index بتاع الصفحة
-                            if (pageController.page == 3) {
+                            int totalItems =
+                                state.questionsState?.data?.length ?? 0;
+                            int currentPage = pageController.page?.round() ?? 0;
+
+                            if (currentPage < totalItems - 1) {
+                              int nextPageIndex = currentPage + 1;
+                              pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                              context.read<QuestionCubit>().doIntent(
+                                ChangePageEvent(nextPageIndex),
+                              );
+                              // هنا ممكن تبعتي intent للـ Cubit يغير الـ index الحالي لو محتاجة الرقم في الـ UI
+                              // context.read<QuestionCubit>().changePageIndex(currentPage + 1);
+                            } else {
                               Navigator.pushNamed(
                                 context,
                                 RoutesName.resultScreen,
-                              );
-                            } else {
-                              // 3. لو مش آخر صفحة، انقل للصفحة اللي بعدها
-                              pageController.nextPage(
-                                duration: Duration(milliseconds: 200),
-                                curve: Curves.easeIn,
                               );
                             }
                           }
@@ -196,5 +241,12 @@ class ExamsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _formatTime(int totalSeconds) {
+    int minutes = totalSeconds ~/ 60;
+    int seconds = totalSeconds % 60;
+    // الـ padLeft(2, '0') بتضمن إن الرقم لو 5 يظهر 05
+    return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
   }
 }

@@ -28,7 +28,7 @@ class QuestionDataSourceImpl implements QuestionsDataSourceContract {
         message: e.message,
         code: e.response?.statusCode ?? 0,
       );
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
       return ErrorBaseResponse(message: AppStrings.timeOutException);
     }
   }

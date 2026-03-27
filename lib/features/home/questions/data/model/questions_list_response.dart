@@ -1,5 +1,6 @@
 import 'package:exam_app_elevate/features/home/common_response/exam_response.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/question_types.dart';
+import 'package:exam_app_elevate/main.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'answers_list_response.dart';
@@ -57,9 +58,9 @@ class QuestionsListResponse {
   factory QuestionsListResponse.fromJson(Map<String, dynamic> json) {
     try {
       return _$QuestionsListResponseFromJson(json);
-    } catch (e, stacktrace) {
-      print("Error parsing question: ${json['question']}");
-      print("Answers data: ${json['answers']}");
+    } catch (e) {
+      talker.debug("Error parsing question: ${json['question']}");
+      talker.debug("Answers data: ${json['answers']}");
       rethrow;
     }
   }

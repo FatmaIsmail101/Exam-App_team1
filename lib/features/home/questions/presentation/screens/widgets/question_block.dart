@@ -4,8 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/values/app_strings.dart';
 
 class QuestionBlock extends StatelessWidget {
-  const QuestionBlock({super.key, required this.questionNum});
+  QuestionBlock({super.key, required this.questionNum, required this.counter});
   final String questionNum;
+  String counter;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -17,6 +18,7 @@ class QuestionBlock extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(AppStrings.question, style: theme.textTheme.labelSmall),
+            Text(counter, style: theme.textTheme.labelSmall),
             Text(AppStrings.to, style: theme.textTheme.labelSmall),
             Text(questionNum, style: theme.textTheme.labelSmall),
           ],
