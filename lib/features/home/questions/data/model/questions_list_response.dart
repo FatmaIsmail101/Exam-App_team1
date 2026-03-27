@@ -1,4 +1,4 @@
-import 'package:exam_app_elevate/features/home/commen_response/exam_response.dart';
+import 'package:exam_app_elevate/features/home/common_response/exam_response.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/question_types.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -8,7 +8,7 @@ part 'questions_list_response.g.dart';
 
 @JsonSerializable()
 class QuestionsListResponse {
-  @JsonKey(name: 'answers')
+  @JsonKey(name: 'answers', fromJson: _answersFromJson)
   List<AnswersListResponse>? answersListResponse;
   @JsonKey(name: '_id')
   String? id;
@@ -34,9 +34,34 @@ class QuestionsListResponse {
     this.subject,
     this.createdAt,
   });
+  // 2. الدالة دي هتضمن إن الداتا لو جات String تتحول لـ List أو ترجع فاضية بدل ما تضرب
+  static List<AnswersListResponse>? _answersFromJson(Object? json) {
+    if (json == null) return null;
+
+    // لو الداتا فعلاً قائمة (وهو الطبيعي)
+    if (json is List) {
+      return json
+          .map((e) => AnswersListResponse.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+
+    // لو السيرفر بعت String (سبب المشكلة)
+    if (json is String) {
+      // هنا ممكن تعمل log إن في مشكلة في السؤال ده
+      return [];
+    }
+
+    return null;
+  }
 
   factory QuestionsListResponse.fromJson(Map<String, dynamic> json) {
-    return _$QuestionsListResponseFromJson(json);
+    try {
+      return _$QuestionsListResponseFromJson(json);
+    } catch (e, stacktrace) {
+      print("Error parsing question: ${json['question']}");
+      print("Answers data: ${json['answers']}");
+      rethrow;
+    }
   }
   Map<String, dynamic> toJson() => _$QuestionsListResponseToJson(this);
 }

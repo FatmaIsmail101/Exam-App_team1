@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:exam_app_elevate/config/base_response/base_response.dart';
+import 'package:exam_app_elevate/config/secure/flutter_secure_storage.dart';
+import 'package:exam_app_elevate/core/values/secure_storage_keys.dart';
 import 'package:exam_app_elevate/features/home/questions/data/data_source/questions_data_source_contract.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/questions_response.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../../core/values/app_strings.dart';
 import '../../api/question_client.dart';
 
 @Injectable(as: QuestionsDataSourceContract)
@@ -13,13 +18,18 @@ class QuestionDataSourceImpl implements QuestionsDataSourceContract {
   @override
   Future<BaseResponse<QuestionsResponse>> getAllQuestions(String id) async {
     try {
-      final response = await questionClient.getAllQuestions(id);
+      final token = await CashingFlutterSecureStorage.get(
+        SecureStorageKeys.token,
+      );
+      final response = await questionClient.getAllQuestions(id, token ?? "");
       return SuccessBaseResponse(data: response);
     } on DioException catch (e) {
       return ErrorBaseResponse(
         message: e.message,
         code: e.response?.statusCode ?? 0,
       );
+    } on TimeoutException catch (e) {
+      return ErrorBaseResponse(message: AppStrings.timeOutException);
     }
   }
 }

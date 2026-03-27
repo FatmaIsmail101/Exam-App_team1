@@ -8,7 +8,13 @@ class QuestionEntity {
   bool isAnswered;
   String correctAnswerKey;
   String question;
+  int duration;
+  int numberOfQuestions;
+  String title;
   QuestionEntity({
+    required this.title,
+    required this.duration,
+    required this.numberOfQuestions,
     required this.question,
     required this.answersListResponse,
     required this.type,

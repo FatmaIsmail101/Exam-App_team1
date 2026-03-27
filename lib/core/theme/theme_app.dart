@@ -11,6 +11,11 @@ class ThemeApp {
     scaffoldBackgroundColor: Color(0xffF9F9F9),
     colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff02369C)),
     useMaterial3: true,
+    dialogTheme: DialogThemeData(
+      backgroundColor: Color(0xffF9F9F9),
+
+      titleTextStyle: TextThemeApp.regular24Red,
+    ),
     textTheme: TextTheme(
       bodyMedium: TextThemeApp.medium20Black,
       bodySmall: TextThemeApp.semiBold12Black,

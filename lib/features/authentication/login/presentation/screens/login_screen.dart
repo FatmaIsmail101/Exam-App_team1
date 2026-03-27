@@ -36,6 +36,7 @@ class LoginScreen extends StatelessWidget {
                 backgroundColor: const Color(0xff4CAF50),
               ),
             );
+            Navigator.pushReplacementNamed(context, RoutesName.examsScreen);
           } else if (state is LoginError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -144,9 +145,8 @@ class LoginScreen extends StatelessWidget {
                                 return Checkbox(
                                   value: rememberMe,
                                   activeColor: const Color(0xff02369C),
-                                  onChanged: (val) => setState(
-                                    () => rememberMe = val ?? false,
-                                  ),
+                                  onChanged: (val) =>
+                                      setState(() => rememberMe = val ?? false),
                                 );
                               },
                             ),

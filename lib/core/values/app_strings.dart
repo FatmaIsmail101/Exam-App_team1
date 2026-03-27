@@ -34,4 +34,5 @@ abstract class AppStrings {
       "Select the correctly punctuated sentence.";
   static const String backButtonText = "Back";
   static const String nextButtonText = "Next";
+  static const String timeOutException = "Something went wrong";
 }

@@ -11,7 +11,7 @@ class CashingFlutterSecureStorage {
     await storage.write(key: key, value: value);
   }
 
-  static Future<String?> get(String key) async {
-    return await storage.read(key: key);
+  static Future<String?> get(String key) {
+    return storage.read(key: key);
   }
 }

@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/values/app_strings.dart';
 
 class QuestionBlock extends StatelessWidget {
-  const QuestionBlock({super.key});
-
+  const QuestionBlock({super.key, required this.questionNum});
+  final String questionNum;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -18,6 +18,7 @@ class QuestionBlock extends StatelessWidget {
           children: [
             Text(AppStrings.question, style: theme.textTheme.labelSmall),
             Text(AppStrings.to, style: theme.textTheme.labelSmall),
+            Text(questionNum, style: theme.textTheme.labelSmall),
           ],
         ),
         LinearProgressIndicator(

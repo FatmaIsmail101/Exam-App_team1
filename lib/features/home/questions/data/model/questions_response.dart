@@ -1,4 +1,4 @@
-import 'package:exam_app_elevate/features/home/commen_response/message.dart';
+import 'package:exam_app_elevate/features/home/common_response/message.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/question_types.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/questions_list_response.dart';
 import 'package:exam_app_elevate/features/home/questions/domain/entity/question_entity.dart';
@@ -24,6 +24,10 @@ class QuestionsResponse {
   List<QuestionEntity> toDomain() {
     return questionsListResponse?.map((questionModel) {
           return QuestionEntity(
+            title: questionModel.examResponse?.title ?? "",
+            duration: questionModel.examResponse?.duration ?? 0,
+            numberOfQuestions:
+                questionModel.examResponse?.numberOfQuestions ?? 0,
             answersListResponse: questionModel.answersListResponse ?? [],
             type: questionModel.type ?? QuestionTypes.singleChoice,
             correctAnswerKey: questionModel.correct ?? "",

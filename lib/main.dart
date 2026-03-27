@@ -10,6 +10,8 @@ import 'package:talker_bloc_logger/talker_bloc_logger_settings.dart';
 
 import 'config/di/di.dart';
 import 'config/secure/flutter_secure_storage.dart';
+import 'core/routes/routes_name.dart';
+import 'core/values/secure_storage_keys.dart';
 
 final talker = Talker();
 
@@ -28,13 +30,17 @@ void main() async {
       printClosings: true,
     ),
   );
-
+  String? token = await CashingFlutterSecureStorage.get(
+    SecureStorageKeys.token,
+  );
   runApp(
     ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context, child) => ExamApp(),
+      builder: (context, child) => ExamApp(
+        startRoute: token != null ? RoutesName.examsScreen : RoutesName.login,
+      ),
     ),
   );
 }

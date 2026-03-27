@@ -48,5 +48,5 @@ class AppEndPoints {
     return "$baseUrl/subjects/$subjectId";
   }
 
-  static const String getAllQuestionsOnSubject = "$baseUrl/questions?exam={id}";
+  static const String getAllQuestionsOnSubject = "$baseUrl/questions";
 }
