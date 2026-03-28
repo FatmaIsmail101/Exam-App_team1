@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../features/authentication/forget_password/presentation/screens/forget_password_screen.dart';
 import '../../features/authentication/login/presentation/screens/login_screen.dart';
 import '../../features/home/questions/presentation/screens/exams_screen.dart';
-import '../../features/result/presentation/screens/result_screen.dart';
+import '../../features/home/questions/presentation/screens/score/score_screen.dart';
 
 class Routes {
   static Route<dynamic> routes(RouteSettings settings) {
@@ -16,7 +16,7 @@ class Routes {
       case RoutesName.examsScreen:
         return MaterialPageRoute(builder: (context) => ExamsScreen());
       case RoutesName.resultScreen:
-        return MaterialPageRoute(builder: (context) => ResultScreen());
+        return MaterialPageRoute(builder: (context) => ScoreScreen());
       default:
         return MaterialPageRoute(builder: (context) => Scaffold());
     }

@@ -80,8 +80,15 @@ class QuestionCubit extends Cubit<QuestionState> {
   }
 
   void _changePage(int index) {
+    bool wasAnsweredBefore = state.selectedAnswers.containsKey(index);
     // بنحدث الـ index بس من غير ما نغير حالة الـ questionsState
-    emit(state.copyWith(currentIndex: index));
+    emit(
+      state.copyWith(
+        currentIndex: index,
+        answer: null, // بنصفر الاختيار للسؤال الجديد
+        enabled: wasAnsweredBefore,
+      ),
+    );
   }
 
   void _startTimer(int minutes) {
@@ -107,24 +114,14 @@ class QuestionCubit extends Cubit<QuestionState> {
     return super.close();
   }
 
-  void _answerSelected(String answerKey) {
-    if (state.questionsState?.data == null) return;
-
-    final index = state.currentIndex ?? 0;
-    final updatedQuestions = List<QuestionEntity>.from(
-      state.questionsState!.data!,
-    );
-
-    // تحديث السؤال الحالي فقط
-    updatedQuestions[index] = updatedQuestions[index].copyWith(
-      // تأكدي إن الحقول دي موجودة في الـ QuestionEntity copyWith
-      selectedAnswerKey: answerKey,
-      isAnswered: true,
-    );
-
+  void _answerSelected(String selectedAnswer) {
+    final updatedAnswers = Map<int, String>.from(state.selectedAnswers);
+    updatedAnswers[state.currentIndex!] = selectedAnswer;
     emit(
       state.copyWith(
-        questionsState: state.questionsState!.copyWith(data: updatedQuestions),
+        enabled: true,
+        answer: updatedAnswers,
+        currentIndex: state.currentIndex,
       ),
     );
   }

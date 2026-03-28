@@ -2,20 +2,26 @@ import 'package:exam_app_elevate/config/base_state/base_state.dart';
 import 'package:exam_app_elevate/features/home/questions/domain/entity/question_entity.dart';
 
 class QuestionState {
+  //Questions
   BaseState<List<QuestionEntity>>? questionsState =
       BaseState<List<QuestionEntity>>(
         isLoading: false,
         data: null,
         errorMessage: null,
       );
+  //PageIndex
   int? currentIndex;
+  //Timer
   int? time;
-  int answerIndex;
+
+  final Map<int, String> selectedAnswers;
+  bool? isButtonEnabled; //مشتقة من selectedAnswer
   QuestionState({
     this.questionsState,
     this.currentIndex = 0,
     this.time,
-    this.answerIndex = -1,
+    this.selectedAnswers = const {},
+    this.isButtonEnabled = false,
   });
 
   static QuestionState init() {
@@ -26,7 +32,8 @@ class QuestionState {
         errorMessage: null,
       ),
       currentIndex: 0,
-      answerIndex: -1,
+      selectedAnswers: {},
+      isButtonEnabled: false,
       time: 0,
     );
   }
@@ -35,13 +42,15 @@ class QuestionState {
     BaseState<List<QuestionEntity>>? questionsState,
     int? currentIndex,
     int? time,
-    int? answerIndex,
+    Map<int, String>? answer,
+    bool? enabled,
   }) {
     return QuestionState(
       questionsState: questionsState ?? this.questionsState,
       currentIndex: currentIndex ?? this.currentIndex,
       time: time ?? this.time,
-      answerIndex: answerIndex ?? this.answerIndex,
+      selectedAnswers: answer ?? this.selectedAnswers,
+      isButtonEnabled: enabled ?? isButtonEnabled,
     );
   }
 }

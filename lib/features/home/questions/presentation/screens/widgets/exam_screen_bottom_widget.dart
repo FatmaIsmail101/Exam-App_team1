@@ -73,26 +73,31 @@ class ExamScreenBottomWidget extends StatelessWidget {
             padding: .symmetric(horizontal: 65.w, vertical: 14.h),
           ),
           // داخل زرار الـ Next
+          // جوه زرار الـ Next في الـ ExamScreenBottomWidget
           onPressed: isAnswered
               ? () {
-                  if (pageController.hasClients) {
-                    int totalItems = length;
-                    int currentPage = pageController.page?.round() ?? 0;
+                  // 1. هاتي الـ Cubit والـ State الحالية
+                  final cubit = context.read<QuestionCubit>();
+                  final state = cubit.state;
 
-                    if (currentPage < totalItems - 1) {
-                      int nextPageIndex = currentPage + 1;
-                      pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                      context.read<QuestionCubit>().doIntent(
-                        ChangePageEvent(nextPageIndex),
-                      );
-                      // هنا ممكن تبعتي intent للـ Cubit يغير الـ index الحالي لو محتاجة الرقم في الـ UI
-                      // context.read<QuestionCubit>().changePageIndex(currentPage + 1);
-                    } else {
-                      Navigator.pushNamed(context, RoutesName.resultScreen);
-                    }
+                  int currentIndex = state.currentIndex ?? 0;
+                  int totalQuestions = length; // العدد الكلي
+
+                  // 2. التشيك: هل ده آخر سؤال؟
+                  if (currentIndex < totalQuestions - 1) {
+                    // لسه فيه أسئلة.. انقل للي بعده
+                    int nextPageIndex = currentIndex + 1;
+
+                    pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+
+                    cubit.doIntent(ChangePageEvent(nextPageIndex));
+                  } else {
+                    // ده فعلاً آخر سؤال.. روح لشاشة النتيجة
+                    Navigator.pushNamed(context, RoutesName.resultScreen);
+                    cubit.doIntent(ViewScore());
                   }
                 }
               : null,

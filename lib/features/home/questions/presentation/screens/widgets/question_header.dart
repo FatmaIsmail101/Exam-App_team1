@@ -4,9 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/values/app_strings.dart';
 
 class QuestionHeader extends StatelessWidget {
-  QuestionHeader({super.key, required this.questionNum, required this.counter});
+  QuestionHeader({
+    required this.value,
+    super.key,
+    required this.questionNum,
+    required this.counter,
+  });
   final String questionNum;
   String counter;
+  double value;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -25,7 +31,7 @@ class QuestionHeader extends StatelessWidget {
         ),
         LinearProgressIndicator(
           trackGap: 10,
-          value: .5, // القيمة من 0.0 لـ 1.0
+          value: value, // القيمة من 0.0 لـ 1.0
           backgroundColor: Color(0xffCFCFCF),
           valueColor: AlwaysStoppedAnimation<Color>(Color(0xff02369C)),
           minHeight: 4.h,

@@ -30,9 +30,7 @@ class AnswersWidget extends StatelessWidget {
         child: Row(
           spacing: 4.w,
           children: [
-            questionTypes == QuestionTypes.singleChoice
-                ? Image.asset(IconPaths.singleChoiceIcon)
-                : Image.asset(IconPaths.multipleChoiceIcon),
+            Image.asset(_getIconPath()),
             Expanded(
               child: Text(
                 answers,
@@ -50,5 +48,21 @@ class AnswersWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getIconPath() {
+    if (questionTypes == QuestionTypes.singleChoice) {
+      // لو سؤال اختيار واحد
+      return isSelected
+          ? IconPaths
+                .selectedSingleChoiceIcon // أيكونة الدائرة المختارة
+          : IconPaths.singleChoiceIcon; // أيكونة الدائرة الفاضية
+    } else {
+      // لو سؤال اختيار متعدد
+      return isSelected
+          ? IconPaths
+                .selectedMultipleChoiceIcon // أيكونة المربع المختار
+          : IconPaths.multipleChoiceIcon; // أيكونة المربع الفاضي
+    }
   }
 }

@@ -20,8 +20,6 @@ class ExamsScreen extends StatelessWidget {
   ExamsScreen({super.key});
 
   final PageController pageController = PageController();
-  int counterNum = 1;
-  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +80,11 @@ class ExamsScreen extends StatelessWidget {
                   questionsState?.errorMessage == null) {
             return Center(child: Text("No Data"));
           }
+          final totalQuestions = data?.length ?? 1;
+          final currentQuestionIndex = (state.currentIndex ?? 0) + 1;
+
+          // حساب النسبة
+          double progressValue = currentQuestionIndex / totalQuestions;
 
           return Scaffold(
             resizeToAvoidBottomInset: true,
@@ -124,8 +127,9 @@ class ExamsScreen extends StatelessWidget {
                 spacing: 24.h,
                 children: [
                   QuestionHeader(
+                    value: progressValue,
                     counter: "${(state.currentIndex ?? 0) + 1}",
-                    questionNum: data?.first.numberOfQuestions.toString() ?? "",
+                    questionNum: totalQuestions.toString(),
                   ),
                   Expanded(
                     child: PageView.builder(
@@ -133,22 +137,22 @@ class ExamsScreen extends StatelessWidget {
                       onPageChanged: (index) {},
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
+                        // داخل itemBuilder في الـ PageView
                         return QuestionContent(
-                          index: index,
+                          // هنا التغيير: هات الإجابة بتاعة السؤال ده من الماب
                           selectedAnswerKey:
-                              data?[index].answersListResponse[index].key ?? "",
-                          questionTypes:
-                              data?[index].type ?? QuestionTypes.singleChoice,
-
+                              state.selectedAnswers?[index] ?? "",
                           question: data?[index].question ?? "",
                           answers: data?[index].answersListResponse ?? [],
+                          questionTypes:
+                              data?[index].type ?? QuestionTypes.singleChoice,
                         );
                       },
                       itemCount: data?.length,
                     ),
                   ),
                   ExamScreenBottomWidget(
-                    isAnswered: data?[currentIndex].isAnswered ?? false,
+                    isAnswered: state.isButtonEnabled ?? false,
                     pageController: pageController,
                     length: data?.length ?? 0,
                   ),

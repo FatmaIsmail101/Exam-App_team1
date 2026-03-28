@@ -15,9 +15,7 @@ class QuestionContent extends StatelessWidget {
     required this.answers,
     required this.questionTypes,
     required this.selectedAnswerKey,
-    required this.index,
   });
-  final int index;
   final String question;
   final List<AnswersListResponse> answers;
   final String selectedAnswerKey; // الإجابة المختارة للسؤال ده حالياً
@@ -37,7 +35,7 @@ class QuestionContent extends StatelessWidget {
               isSelected: selectedAnswerKey == e.key,
               onTap: () {
                 context.read<QuestionCubit>().doIntent(
-                  AnswerSelectedEvent(e.key!),
+                  AnswerSelectedEvent(e.key ?? ""),
                 );
               },
             ),
