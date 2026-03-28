@@ -6,6 +6,7 @@ class Assets {
   Assets._();
 
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsImageGen image = $AssetsImageGen();
 }
 
 class $AssetsIconsGen {
@@ -13,6 +14,20 @@ class $AssetsIconsGen {
 
   final AssetGenImage timerIcon = const AssetGenImage(
     'assets/icons/timer_icon.png',
+  );
+}
+
+class $AssetsImageGen {
+  const $AssetsImageGen();
+
+  final AssetGenImage timeOut = const AssetGenImage(
+    'assets/image/time_out.png',
+  );
+  final AssetGenImage timeOut2x = const AssetGenImage(
+    'assets/image/time_out@2x.png',
+  );
+  final AssetGenImage timeOut3x = const AssetGenImage(
+    'assets/image/time_out@3x.png',
   );
 }
 

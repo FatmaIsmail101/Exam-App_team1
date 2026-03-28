@@ -22,8 +22,16 @@ class QuestionCubit extends Cubit<QuestionState> {
         break;
       case ChangePageEvent():
         _changePage(event.newIndex);
+        break;
       case ChangeTimeEvent():
         _startTimer(event.duration);
+        break;
+      case ViewScore():
+        _close();
+        break;
+      case AnswerSelectedEvent():
+        _answerSelected(event.answerIndex);
+        break;
     }
   }
 
@@ -54,6 +62,8 @@ class QuestionCubit extends Cubit<QuestionState> {
           ),
         );
         _startTimer(response.data?.first.duration ?? 0);
+
+        break;
 
       case ErrorBaseResponse<List<QuestionEntity>>():
         emit(
@@ -92,8 +102,30 @@ class QuestionCubit extends Cubit<QuestionState> {
 
   // عند قفل الشاشة لازم نمسح التايمر عشان ميفضلش شغال في الميموري
   @override
-  Future<void> close() {
+  Future<void> _close() {
     _timer?.cancel();
     return super.close();
+  }
+
+  void _answerSelected(String answerKey) {
+    if (state.questionsState?.data == null) return;
+
+    final index = state.currentIndex ?? 0;
+    final updatedQuestions = List<QuestionEntity>.from(
+      state.questionsState!.data!,
+    );
+
+    // تحديث السؤال الحالي فقط
+    updatedQuestions[index] = updatedQuestions[index].copyWith(
+      // تأكدي إن الحقول دي موجودة في الـ QuestionEntity copyWith
+      selectedAnswerKey: answerKey,
+      isAnswered: true,
+    );
+
+    emit(
+      state.copyWith(
+        questionsState: state.questionsState!.copyWith(data: updatedQuestions),
+      ),
+    );
   }
 }

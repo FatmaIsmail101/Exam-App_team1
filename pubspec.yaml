@@ -23,6 +23,7 @@ dependencies:
   # add injectable to your dependencies
   injectable:
   get_it:
+  vibration: ^2.0.1
 
   bloc: ^9.2.0
   equatable: ^2.0.8
@@ -55,7 +56,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icons/
-    - assets/images/
+    - assets/image/
 
   #   - images/a_dot_ham.jpeg
 

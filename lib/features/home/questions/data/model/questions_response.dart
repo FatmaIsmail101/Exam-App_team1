@@ -57,6 +57,8 @@ class QuestionsResponse {
             // 2. سؤال جديد: هل المستخدم جاوب؟ (في الأول بتبقى false)
             isAnswered: false,
             question: questionModel.question ?? "",
+            selectedAnswerKey:
+                questionModel.answersListResponse?.first.key ?? "",
           );
         }).toList() ??
         [];

@@ -14,3 +14,10 @@ class ChangeTimeEvent extends QuestionEvent {
   final int duration;
   ChangeTimeEvent(this.duration);
 }
+
+class ViewScore extends QuestionEvent {}
+
+class AnswerSelectedEvent extends QuestionEvent {
+  final String answerIndex;
+  AnswerSelectedEvent(this.answerIndex);
+}

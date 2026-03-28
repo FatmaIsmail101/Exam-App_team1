@@ -23,6 +23,7 @@ class ThemeApp {
       bodyLarge: TextThemeApp.bodySmall16Red,
       labelMedium: TextThemeApp.bodySmall16Red,
       labelSmall: TextThemeApp.bodyLarge14Grey,
+      labelLarge: TextThemeApp.regular24Red,
     ),
     inputDecorationTheme: TextFieldTheme.inputDecorationThemetextField,
     elevatedButtonTheme: ElevatedButtonThemeData(

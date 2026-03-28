@@ -10,7 +10,13 @@ class QuestionState {
       );
   int? currentIndex;
   int? time;
-  QuestionState({this.questionsState, this.currentIndex = 0, this.time});
+  int answerIndex;
+  QuestionState({
+    this.questionsState,
+    this.currentIndex = 0,
+    this.time,
+    this.answerIndex = -1,
+  });
 
   static QuestionState init() {
     return QuestionState(
@@ -20,6 +26,7 @@ class QuestionState {
         errorMessage: null,
       ),
       currentIndex: 0,
+      answerIndex: -1,
       time: 0,
     );
   }
@@ -28,11 +35,13 @@ class QuestionState {
     BaseState<List<QuestionEntity>>? questionsState,
     int? currentIndex,
     int? time,
+    int? answerIndex,
   }) {
     return QuestionState(
       questionsState: questionsState ?? this.questionsState,
       currentIndex: currentIndex ?? this.currentIndex,
       time: time ?? this.time,
+      answerIndex: answerIndex ?? this.answerIndex,
     );
   }
 }
