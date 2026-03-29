@@ -21,3 +21,5 @@ class AnswerSelectedEvent extends QuestionEvent {
   final String answerIndex;
   AnswerSelectedEvent(this.answerIndex);
 }
+
+class ExamResultEvent extends QuestionEvent {}

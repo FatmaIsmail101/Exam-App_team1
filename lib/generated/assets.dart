@@ -12,6 +12,18 @@ class Assets {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  final AssetGenImage multiChoiceIcon = const AssetGenImage(
+    'assets/icons/multi_choice_icon.png',
+  );
+  final AssetGenImage selectedMultiChoice = const AssetGenImage(
+    'assets/icons/selected_multi_choice.png',
+  );
+  final AssetGenImage selectedSingleChoice = const AssetGenImage(
+    'assets/icons/selected_single_choice.png',
+  );
+  final AssetGenImage singleChoiceIcon = const AssetGenImage(
+    'assets/icons/single_choice_icon.png',
+  );
   final AssetGenImage timerIcon = const AssetGenImage(
     'assets/icons/timer_icon.png',
   );

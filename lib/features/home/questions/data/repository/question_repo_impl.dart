@@ -5,6 +5,11 @@ import 'package:exam_app_elevate/features/home/questions/domain/entity/question_
 import 'package:exam_app_elevate/features/home/questions/domain/repository/question_repo_contract.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../../config/caching/caching_helper.dart';
+import '../../../../../config/caching/hive_keys.dart';
+import '../../../../../config/di/di.dart';
+import '../model/exam_result.dart';
+
 @Injectable(as: QuestionRepoContract)
 class QuestionRepoImpl implements QuestionRepoContract {
   final QuestionsDataSourceContract dataSource;
@@ -23,6 +28,39 @@ class QuestionRepoImpl implements QuestionRepoContract {
           message: response.message,
           code: response.code,
         );
+    }
+  }
+
+  @override
+  Future<BaseResponse<ExamResult>> getAnswerCount(
+    Map<int, int> userAnswers,
+  ) async {
+    try {
+      int wrongCounter = 0;
+      int correctCounter = 0;
+
+      // 1. هات الأسئلة كلها من الكاش
+      final cachedData = getIt<CachingHelper>().getData<QuestionsResponse>(
+        HiveKeys.questionsKey,
+      );
+      final questions = cachedData?.questionsListResponse ?? [];
+      userAnswers.forEach((questionIndex, selectedAnswerKey) {
+        final correctAnswer = questions[questionIndex].correct;
+
+        if (selectedAnswerKey == correctAnswer) {
+          correctCounter++;
+        } else {
+          wrongCounter++;
+        }
+      });
+      return SuccessBaseResponse<ExamResult>(
+        data: ExamResult(
+          wrongCounter: wrongCounter,
+          correctCounter: correctCounter,
+        ),
+      );
+    } catch (e) {
+      return ErrorBaseResponse<ExamResult>(message: e.toString());
     }
   }
 }

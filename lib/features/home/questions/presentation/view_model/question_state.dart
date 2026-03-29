@@ -1,4 +1,5 @@
 import 'package:exam_app_elevate/config/base_state/base_state.dart';
+import 'package:exam_app_elevate/features/home/questions/data/model/exam_result.dart';
 import 'package:exam_app_elevate/features/home/questions/domain/entity/question_entity.dart';
 
 class QuestionState {
@@ -13,10 +14,15 @@ class QuestionState {
   int? currentIndex;
   //Timer
   int? time;
-
+  BaseState<ExamResult>? examResultState = BaseState<ExamResult>(
+    isLoading: true,
+    data: null,
+    errorMessage: null,
+  );
   final Map<int, String> selectedAnswers;
   bool? isButtonEnabled; //مشتقة من selectedAnswer
   QuestionState({
+    this.examResultState,
     this.questionsState,
     this.currentIndex = 0,
     this.time,
@@ -35,6 +41,11 @@ class QuestionState {
       selectedAnswers: {},
       isButtonEnabled: false,
       time: 0,
+      examResultState: BaseState<ExamResult>(
+        isLoading: true,
+        data: null,
+        errorMessage: null,
+      ),
     );
   }
 
@@ -44,13 +55,15 @@ class QuestionState {
     int? time,
     Map<int, String>? answer,
     bool? enabled,
+    BaseState<ExamResult>? examResultState,
   }) {
     return QuestionState(
       questionsState: questionsState ?? this.questionsState,
       currentIndex: currentIndex ?? this.currentIndex,
       time: time ?? this.time,
-      selectedAnswers: answer ?? this.selectedAnswers,
+      selectedAnswers: answer ?? selectedAnswers,
       isButtonEnabled: enabled ?? isButtonEnabled,
+      examResultState: examResultState ?? this.examResultState,
     );
   }
 }

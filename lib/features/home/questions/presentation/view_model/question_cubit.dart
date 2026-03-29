@@ -8,13 +8,17 @@ import 'package:exam_app_elevate/features/home/questions/presentation/view_model
 import 'package:injectable/injectable.dart';
 
 import '../../../../../config/base_state/base_state.dart';
+import '../../data/model/exam_result.dart';
 import '../../domain/entity/question_entity.dart';
+import '../../domain/use_case/exam_result_use_case.dart';
 
 @injectable
 class QuestionCubit extends Cubit<QuestionState> {
   Timer? _timer;
   final QuestionUsecase _usecase;
-  QuestionCubit(this._usecase) : super(QuestionState.init());
+  final ExamResultUseCase _examResultUseCase;
+  QuestionCubit(this._usecase, this._examResultUseCase)
+    : super(QuestionState.init());
   void doIntent(QuestionEvent event) {
     switch (event) {
       case getQuestionEvent():
@@ -31,6 +35,9 @@ class QuestionCubit extends Cubit<QuestionState> {
         break;
       case AnswerSelectedEvent():
         _answerSelected(event.answerIndex);
+        break;
+      case ExamResultEvent():
+        _examResult();
         break;
     }
   }
@@ -124,5 +131,43 @@ class QuestionCubit extends Cubit<QuestionState> {
         currentIndex: state.currentIndex,
       ),
     );
+  }
+
+  Future<void> _examResult() async {
+    emit(
+      state.copyWith(
+        examResultState: BaseState<ExamResult>(
+          isLoading: true,
+          data: null,
+          errorMessage: null,
+        ),
+      ),
+    );
+    final Map<int, int> convertedAnswers = state.selectedAnswers.map(
+      (key, value) => MapEntry(key, int.parse(value)),
+    );
+    final response = await _examResultUseCase.getAnswerCount(convertedAnswers);
+    switch (response) {
+      case SuccessBaseResponse<ExamResult>():
+        emit(
+          state.copyWith(
+            examResultState: BaseState<ExamResult>(
+              isLoading: false,
+              data: response.data,
+              errorMessage: null,
+            ),
+          ),
+        );
+      case ErrorBaseResponse<ExamResult>():
+        emit(
+          state.copyWith(
+            examResultState: BaseState<ExamResult>(
+              isLoading: false,
+              data: null,
+              errorMessage: response.message,
+            ),
+          ),
+        );
+    }
   }
 }

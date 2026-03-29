@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/routes/routes_name.dart';
 import '../../../../../core/widgets/custom_dialog.dart';
 import '../../../../../main.dart';
 import '../../data/model/question_types.dart';
@@ -36,6 +37,7 @@ class ExamsScreen extends StatelessWidget {
               context.read<QuestionCubit>().doIntent(ViewScore());
               talker.debug("View Score");
             });
+            Navigator.pushReplacementNamed(context, RoutesName.resultScreen);
           }
         },
         listenWhen: (previous, current) => current.time != previous.time,
@@ -140,8 +142,7 @@ class ExamsScreen extends StatelessWidget {
                         // داخل itemBuilder في الـ PageView
                         return QuestionContent(
                           // هنا التغيير: هات الإجابة بتاعة السؤال ده من الماب
-                          selectedAnswerKey:
-                              state.selectedAnswers?[index] ?? "",
+                          selectedAnswerKey: state.selectedAnswers[index] ?? "",
                           question: data?[index].question ?? "",
                           answers: data?[index].answersListResponse ?? [],
                           questionTypes:
