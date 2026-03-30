@@ -18,7 +18,7 @@ final talker = Talker();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CashingFlutterSecureStorage.init();
-  configureDependencies();
+  await configureDependencies();
 
   Bloc.observer = TalkerBlocObserver(
     talker: talker,

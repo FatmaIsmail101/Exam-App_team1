@@ -37,7 +37,7 @@ class ExamsScreen extends StatelessWidget {
               context.read<QuestionCubit>().doIntent(ViewScore());
               talker.debug("View Score");
             });
-            Navigator.pushReplacementNamed(context, RoutesName.resultScreen);
+            Navigator.pushReplacementNamed(context, RoutesName.scoreScreen);
           }
         },
         listenWhen: (previous, current) => current.time != previous.time,
@@ -153,6 +153,9 @@ class ExamsScreen extends StatelessWidget {
                     ),
                   ),
                   ExamScreenBottomWidget(
+                    answerKey:
+                        state.questionsState?.data?.first.selectedAnswerKey ??
+                        "",
                     isAnswered: state.isButtonEnabled ?? false,
                     pageController: pageController,
                     length: data?.length ?? 0,

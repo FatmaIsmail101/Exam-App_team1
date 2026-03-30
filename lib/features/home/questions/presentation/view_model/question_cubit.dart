@@ -5,6 +5,7 @@ import 'package:exam_app_elevate/config/base_response/base_response.dart';
 import 'package:exam_app_elevate/features/home/questions/domain/use_case/question_usecase.dart';
 import 'package:exam_app_elevate/features/home/questions/presentation/view_model/question_event.dart';
 import 'package:exam_app_elevate/features/home/questions/presentation/view_model/question_state.dart';
+import 'package:exam_app_elevate/main.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../config/base_state/base_state.dart';
@@ -55,6 +56,7 @@ class QuestionCubit extends Cubit<QuestionState> {
     );
 
     final response = await _usecase.getQuestions(id);
+    if (isClosed) return;
 
     switch (response) {
       case SuccessBaseResponse<List<QuestionEntity>>():
@@ -134,6 +136,10 @@ class QuestionCubit extends Cubit<QuestionState> {
   }
 
   Future<void> _examResult() async {
+    talker.warning("Current State Answers: ${state.selectedAnswers}");
+    if (state.selectedAnswers.isEmpty) {
+      talker.warning("Warning: selectedAnswers is EMPTY!");
+    }
     emit(
       state.copyWith(
         examResultState: BaseState<ExamResult>(
@@ -143,10 +149,15 @@ class QuestionCubit extends Cubit<QuestionState> {
         ),
       ),
     );
-    final Map<int, int> convertedAnswers = state.selectedAnswers.map(
-      (key, value) => MapEntry(key, int.parse(value)),
+
+    // final Map<int, int> convertedAnswers = state.selectedAnswers.map(
+    //   (key, value) => MapEntry(key, int.parse(value)),
+    // );
+    //talker.warning("Converted Answers to send: $convertedAnswers");
+    final response = await _examResultUseCase.getAnswerCount(
+      state.selectedAnswers,
     );
-    final response = await _examResultUseCase.getAnswerCount(convertedAnswers);
+    if (isClosed) return;
     switch (response) {
       case SuccessBaseResponse<ExamResult>():
         emit(

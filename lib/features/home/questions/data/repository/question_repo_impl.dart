@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:exam_app_elevate/config/base_response/base_response.dart';
 import 'package:exam_app_elevate/features/home/questions/data/data_source/questions_data_source_contract.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/questions_response.dart';
@@ -6,8 +8,8 @@ import 'package:exam_app_elevate/features/home/questions/domain/repository/quest
 import 'package:injectable/injectable.dart';
 
 import '../../../../../config/caching/caching_helper.dart';
-import '../../../../../config/caching/hive_keys.dart';
-import '../../../../../config/di/di.dart';
+import '../../../../../config/caching/caching_keys.dart';
+import '../../../../../main.dart';
 import '../model/exam_result.dart';
 
 @Injectable(as: QuestionRepoContract)
@@ -33,26 +35,39 @@ class QuestionRepoImpl implements QuestionRepoContract {
 
   @override
   Future<BaseResponse<ExamResult>> getAnswerCount(
-    Map<int, int> userAnswers,
+    Map<int, String> userAnswers,
   ) async {
     try {
       int wrongCounter = 0;
       int correctCounter = 0;
 
-      // 1. هات الأسئلة كلها من الكاش
-      final cachedData = getIt<CachingHelper>().getData<QuestionsResponse>(
-        HiveKeys.questionsKey,
+      // 1. هات الـ String من الكاش
+      final String? cachedData = CachingHelper.getString(
+        CachingKeys.questionsKey,
       );
-      final questions = cachedData?.questionsListResponse ?? [];
+
+      if (cachedData == null) {
+        return ErrorBaseResponse(message: "No cached data found");
+      }
+
+      // 2. حول الـ String لـ Map وبعدين لـ Object
+      final Map<String, dynamic> jsonData = jsonDecode(cachedData);
+      final questionsResponse = QuestionsResponse.fromJson(
+        jsonData,
+      ); // ✅ التحويل
+      final questions = questionsResponse.questionsListResponse ?? [];
       userAnswers.forEach((questionIndex, selectedAnswerKey) {
         final correctAnswer = questions[questionIndex].correct;
-
-        if (selectedAnswerKey == correctAnswer) {
+        talker.warning(
+          "Check Q$questionIndex: Selected($selectedAnswerKey) [Type: ${selectedAnswerKey.runtimeType}] | Correct($correctAnswer) [Type: ${correctAnswer.runtimeType}]",
+        );
+        if (selectedAnswerKey.toString() == correctAnswer.toString()) {
           correctCounter++;
         } else {
           wrongCounter++;
         }
       });
+      talker.warning("Correct: $correctCounter, Wrong: $wrongCounter");
       return SuccessBaseResponse<ExamResult>(
         data: ExamResult(
           wrongCounter: wrongCounter,

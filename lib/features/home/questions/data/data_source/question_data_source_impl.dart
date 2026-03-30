@@ -1,9 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:exam_app_elevate/config/base_response/base_response.dart';
-import 'package:exam_app_elevate/config/caching/hive_keys.dart';
-import 'package:exam_app_elevate/config/di/di.dart';
 import 'package:exam_app_elevate/config/secure/flutter_secure_storage.dart';
 import 'package:exam_app_elevate/core/values/secure_storage_keys.dart';
 import 'package:exam_app_elevate/features/home/questions/data/data_source/questions_data_source_contract.dart';
@@ -11,6 +10,7 @@ import 'package:exam_app_elevate/features/home/questions/data/model/questions_re
 import 'package:injectable/injectable.dart';
 
 import '../../../../../config/caching/caching_helper.dart';
+import '../../../../../config/caching/caching_keys.dart';
 import '../../../../../core/values/app_strings.dart';
 import '../../api/question_client.dart';
 
@@ -27,10 +27,8 @@ class QuestionDataSourceImpl implements QuestionsDataSourceContract {
         SecureStorageKeys.token,
       );
       final response = await questionClient.getAllQuestions(id, token ?? "");
-      getIt.get<CachingHelper>().saveData<QuestionsResponse>(
-        HiveKeys.questionsKey,
-        response,
-      );
+      final encode = jsonEncode(response.toJson());
+      await CachingHelper.saveString(CachingKeys.questionsKey, encode);
       return SuccessBaseResponse(data: response);
     } on DioException catch (e) {
       return ErrorBaseResponse(

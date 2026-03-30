@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../core/routes/routes_name.dart';
 import '../../../../../../core/values/app_strings.dart';
 import '../../view_model/question_cubit.dart';
 import '../../view_model/question_event.dart';
+import '../score/score_screen.dart';
 
 class ExamScreenBottomWidget extends StatelessWidget {
   ExamScreenBottomWidget({
+    required this.answerKey,
     super.key,
     required this.pageController,
     required this.length,
@@ -17,10 +18,12 @@ class ExamScreenBottomWidget extends StatelessWidget {
   PageController pageController;
   int length;
   bool isAnswered = false;
+  String answerKey;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final cubit = context.read<QuestionCubit>();
+    final state = cubit.state;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: .start,
@@ -77,12 +80,10 @@ class ExamScreenBottomWidget extends StatelessWidget {
           onPressed: isAnswered
               ? () {
                   // 1. هاتي الـ Cubit والـ State الحالية
-                  final cubit = context.read<QuestionCubit>();
-                  final state = cubit.state;
 
                   int currentIndex = state.currentIndex ?? 0;
                   int totalQuestions = length; // العدد الكلي
-
+                  cubit.doIntent(ExamResultEvent(answerKey, currentIndex));
                   // 2. التشيك: هل ده آخر سؤال؟
                   if (currentIndex < totalQuestions - 1) {
                     // لسه فيه أسئلة.. انقل للي بعده
@@ -95,17 +96,25 @@ class ExamScreenBottomWidget extends StatelessWidget {
 
                     cubit.doIntent(ChangePageEvent(nextPageIndex));
                   } else {
-                    // ده فعلاً آخر سؤال.. روح لشاشة النتيجة
-                    Navigator.pushNamed(context, RoutesName.resultScreen);
                     cubit.doIntent(ViewScore());
+                    // ده فعلاً آخر سؤال.. روح لشاشة النتيجة
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ScoreScreen(cubit: cubit),
+                      ),
+                    );
                   }
                 }
               : null,
           child: Text(
-            AppStrings.nextButtonText,
+            (state.currentIndex ?? 0) < (length - 1)
+                ? AppStrings.nextButtonText
+                : "Finish",
             style: theme.textTheme.bodyLarge?.copyWith(
               color: Color(0xffF9F9F9),
               fontWeight: .bold,
+              fontSize: 15.sp,
             ),
           ),
         ),

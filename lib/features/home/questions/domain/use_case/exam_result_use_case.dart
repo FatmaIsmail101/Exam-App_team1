@@ -9,7 +9,7 @@ class ExamResultUseCase {
   QuestionRepoContract repo;
   ExamResultUseCase(this.repo);
   Future<BaseResponse<ExamResult>> getAnswerCount(
-    Map<int, int> userAnswers,
+    Map<int, String> userAnswers,
   ) async {
     return repo.getAnswerCount(userAnswers);
   }

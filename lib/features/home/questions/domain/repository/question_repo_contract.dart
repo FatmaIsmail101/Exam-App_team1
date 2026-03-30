@@ -5,5 +5,5 @@ import '../../data/model/exam_result.dart';
 
 abstract class QuestionRepoContract {
   Future<BaseResponse<List<QuestionEntity>>> getQuestions(String id);
-  Future<BaseResponse<ExamResult>> getAnswerCount(Map<int, int> userAnswers);
+  Future<BaseResponse<ExamResult>> getAnswerCount(Map<int, String> userAnswers);
 }

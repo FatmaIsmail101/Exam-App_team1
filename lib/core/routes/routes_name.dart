@@ -8,4 +8,5 @@ abstract class RoutesName {
   static const String home = "home";
   static const String examsScreen = "examsScreen";
   static const String resultScreen = "resultScreen";
+  static const String scoreScreen = "scoreScreen";
 }
