@@ -44,7 +44,7 @@ dev_dependencies:
   injectable_generator:
   retrofit_generator: ^10.0.1 #Generate code from Retrofit by annotation
   build_runner: ^2.6.0 #Generation
-  json_serializable: ^6.10.0 #Generate code from JSON by annotating Dart classes
+  json_serializable: ^4.11.0 #Generate code from JSON by annotating Dart classes
 
 
   flutter_lints: ^6.0.0
