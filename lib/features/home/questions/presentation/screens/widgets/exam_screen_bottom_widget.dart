@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/values/app_strings.dart';
+import '../../../data/model/exam_result.dart';
 import '../../view_model/question_cubit.dart';
 import '../../view_model/question_event.dart';
 import '../score/score_screen.dart';
@@ -101,7 +102,11 @@ class ExamScreenBottomWidget extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ScoreScreen(cubit: cubit),
+                        builder: (context) => ScoreScreen(
+                          entity:
+                              state.examResultState?.data ??
+                              ExamResult(correctCounter: 0, wrongCounter: 0),
+                        ),
                       ),
                     );
                   }

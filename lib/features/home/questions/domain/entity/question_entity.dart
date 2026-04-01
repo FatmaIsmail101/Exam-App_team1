@@ -12,7 +12,11 @@ class QuestionEntity {
   int numberOfQuestions;
   String title;
   String selectedAnswerKey;
+  int? correctAnswer;
+  int? wrongAnswer;
   QuestionEntity({
+    this.correctAnswer,
+    this.wrongAnswer,
     required this.title,
     required this.duration,
     required this.numberOfQuestions,
@@ -28,6 +32,8 @@ class QuestionEntity {
     bool? isAnswered,
     String? question,
     String? correctAnswerKey,
+    int? correctAnswer,
+    int? wrongAnswer,
     List<AnswersListResponse>? answersListResponse,
     QuestionTypes? type,
     int? duration,
@@ -35,6 +41,8 @@ class QuestionEntity {
     String? title,
   }) {
     return QuestionEntity(
+      correctAnswer: correctAnswer ?? this.correctAnswer,
+      wrongAnswer: wrongAnswer ?? this.wrongAnswer,
       question: this.question,
       selectedAnswerKey: selectedAnswerKey ?? this.selectedAnswerKey,
       isAnswered: isAnswered ?? this.isAnswered,

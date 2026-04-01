@@ -55,7 +55,9 @@ class QuestionsResponse {
             correctAnswerKey: questionModel.correct ?? "",
 
             // 2. سؤال جديد: هل المستخدم جاوب؟ (في الأول بتبقى false)
-            isAnswered: false,
+            isAnswered:
+                questionModel.answersListResponse?.first.key ==
+                questionModel.correct,
             question: questionModel.question ?? "",
             selectedAnswerKey:
                 questionModel.answersListResponse?.first.key ?? "",

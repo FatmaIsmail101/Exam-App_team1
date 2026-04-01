@@ -1,4 +1,5 @@
 import 'package:exam_app_elevate/core/routes/routes_name.dart';
+import 'package:exam_app_elevate/features/home/questions/data/model/exam_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +30,9 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => BlocProvider.value(
             value: cubit,
-            child: ScoreScreen(cubit: cubit),
+            child: ScoreScreen(
+              entity: ExamResult(correctCounter: 0, wrongCounter: 0),
+            ),
           ),
         );
       default:

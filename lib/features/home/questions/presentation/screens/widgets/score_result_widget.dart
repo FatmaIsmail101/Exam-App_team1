@@ -7,8 +7,8 @@ class ScoreResultWidget extends StatelessWidget {
     required this.correct,
     required this.wrong,
   });
-  final int correct;
-  final int wrong;
+  final String correct;
+  final String wrong;
   @override
   Widget build(BuildContext context) {
     return Column(
