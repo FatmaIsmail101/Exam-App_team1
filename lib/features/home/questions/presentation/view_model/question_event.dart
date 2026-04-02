@@ -1,29 +1,16 @@
 sealed class QuestionEvent {}
 
-class getQuestionEvent extends QuestionEvent {
-  final String id;
-  getQuestionEvent(this.id);
-}
+class GetQuestionEvent extends QuestionEvent {}
 
-class ChangePageEvent extends QuestionEvent {
-  final int newIndex;
-  ChangePageEvent(this.newIndex);
-}
+class NextPageEvent extends QuestionEvent {}
 
-class ChangeTimeEvent extends QuestionEvent {
-  final int duration;
-  ChangeTimeEvent(this.duration);
-}
+class PrevPageEvent extends QuestionEvent {}
 
-class ViewScore extends QuestionEvent {}
+class FinishExamEvent extends QuestionEvent {}
 
 class AnswerSelectedEvent extends QuestionEvent {
-  final String answerIndex;
-  AnswerSelectedEvent(this.answerIndex);
-}
+  final int answerIndex;
+  final String answer;
 
-class ExamResultEvent extends QuestionEvent {
-  String answerKey;
-  int index;
-  ExamResultEvent(this.answerKey, this.index);
+  AnswerSelectedEvent(this.answerIndex, this.answer);
 }

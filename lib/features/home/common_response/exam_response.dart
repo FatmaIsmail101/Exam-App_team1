@@ -18,6 +18,7 @@ class ExamResponse {
   bool? active;
   @JsonKey(name: 'createdAt')
   String? createdAt;
+
   ExamResponse({
     this.id,
     this.title,
@@ -27,6 +28,7 @@ class ExamResponse {
     this.active,
     this.createdAt,
   });
+
   Map<String, dynamic> toJson() => _$ExamResponseToJson(this);
 
   factory ExamResponse.fromJson(Map<String, dynamic> json) =>

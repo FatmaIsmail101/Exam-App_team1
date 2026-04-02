@@ -4,15 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/values/app_strings.dart';
 
 class QuestionHeader extends StatelessWidget {
-  QuestionHeader({
-    required this.value,
+  const QuestionHeader({
     super.key,
     required this.questionNum,
-    required this.counter,
+    required this.totalQuetionNum,
   });
-  final String questionNum;
-  String counter;
-  double value;
+
+  final int questionNum;
+  final int totalQuetionNum;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -24,14 +24,15 @@ class QuestionHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(AppStrings.question, style: theme.textTheme.labelSmall),
-            Text(counter, style: theme.textTheme.labelSmall),
+            Text(totalQuetionNum.toString(), style: theme.textTheme.labelSmall),
             Text(AppStrings.to, style: theme.textTheme.labelSmall),
-            Text(questionNum, style: theme.textTheme.labelSmall),
+            Text(questionNum.toString(), style: theme.textTheme.labelSmall),
           ],
         ),
         LinearProgressIndicator(
           trackGap: 10,
-          value: value, // القيمة من 0.0 لـ 1.0
+          value: questionNum / totalQuetionNum,
+          // القيمة من 0.0 لـ 1.0
           backgroundColor: Color(0xffCFCFCF),
           valueColor: AlwaysStoppedAnimation<Color>(Color(0xff02369C)),
           minHeight: 4.h,

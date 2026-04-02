@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../values/image_paths.dart';
 
 class CustomDialog {
-  static void showTimeOutDialog(BuildContext context, Function onPressed) {
+  static void showTimeOutDialog(BuildContext context, VoidCallback onPressed) {
     final theme = Theme.of(context);
     showDialog(
       context: context,
@@ -53,9 +53,7 @@ class CustomDialog {
                   child: SizedBox(
                     width: double.infinity, // لجعل الزر يأخذ العرض المتاح
                     child: ElevatedButton(
-                      onPressed: () {
-                        onPressed;
-                      },
+                      onPressed: onPressed,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(
                           0xFF02369C,

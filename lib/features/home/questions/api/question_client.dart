@@ -13,6 +13,7 @@ part 'question_client.g.dart';
 abstract class QuestionClient {
   @factoryMethod
   factory QuestionClient(Dio dio) = _QuestionClient;
+
   @GET(AppEndPoints.getAllQuestionsOnSubject)
   Future<QuestionsResponse> getAllQuestions(
     @Query(ApiParam.exam) String id,

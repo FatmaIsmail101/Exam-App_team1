@@ -8,6 +8,7 @@ class AnswersListResponse {
   String? key;
   @JsonKey(name: 'answer')
   String? answer;
+
   AnswersListResponse({this.key, this.answer});
 
   Map<String, dynamic> toJson() => _$AnswersListResponseToJson(this);

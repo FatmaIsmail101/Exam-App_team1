@@ -1,5 +1,4 @@
 import 'package:exam_app_elevate/features/home/common_response/exam_response.dart';
-import 'package:exam_app_elevate/features/home/questions/data/model/question_types.dart';
 import 'package:exam_app_elevate/main.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -14,7 +13,7 @@ class QuestionsListResponse {
   @JsonKey(name: '_id')
   String? id;
   @JsonKey(name: 'type')
-  QuestionTypes? type;
+  String? type;
   @JsonKey(name: 'question')
   String? question;
   @JsonKey(name: "correct")
@@ -25,6 +24,7 @@ class QuestionsListResponse {
   String? subject;
   @JsonKey(name: 'createdAt')
   String? createdAt;
+
   QuestionsListResponse({
     this.answersListResponse,
     this.id,
@@ -35,6 +35,7 @@ class QuestionsListResponse {
     this.subject,
     this.createdAt,
   });
+
   // 2. الدالة دي هتضمن إن الداتا لو جات String تتحول لـ List أو ترجع فاضية بدل ما تضرب
   static List<AnswersListResponse>? _answersFromJson(Object? json) {
     if (json == null) return null;
@@ -64,5 +65,6 @@ class QuestionsListResponse {
       rethrow;
     }
   }
+
   Map<String, dynamic> toJson() => _$QuestionsListResponseToJson(this);
 }

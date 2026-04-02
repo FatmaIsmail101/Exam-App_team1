@@ -4,31 +4,22 @@ import 'package:exam_app_elevate/features/home/questions/domain/entity/question_
 
 class QuestionState {
   //Questions
-  BaseState<List<QuestionEntity>>? questionsState =
+  BaseState<List<QuestionEntity>> questionsState =
       BaseState<List<QuestionEntity>>(
         isLoading: false,
         data: null,
         errorMessage: null,
       );
+
   //PageIndex
-  int? currentIndex;
-  //Timer
-  int? time;
-  BaseState<ExamResult>? examResultState = BaseState<ExamResult>(
-    isLoading: true,
-    data: null,
-    errorMessage: null,
-  );
-  final Map<int, String> selectedAnswers;
-  bool? isButtonEnabled; //مشتقة من selectedAnswer
+  int currentIndexPage;
+
   QuestionState({
-    this.examResultState,
-    this.questionsState,
-    this.currentIndex = 0,
-    this.time,
-    this.selectedAnswers = const {},
-    this.isButtonEnabled = false,
-  });
+    BaseState<List<QuestionEntity>>? questionsState,
+    this.currentIndexPage = 0,
+  }) {
+    this.questionsState = questionsState ?? this.questionsState;
+  }
 
   static QuestionState init() {
     return QuestionState(
@@ -37,21 +28,13 @@ class QuestionState {
         data: null,
         errorMessage: null,
       ),
-      currentIndex: 0,
-      selectedAnswers: {},
-      isButtonEnabled: false,
-      time: 0,
-      examResultState: BaseState<ExamResult>(
-        isLoading: true,
-        data: null,
-        errorMessage: null,
-      ),
+      currentIndexPage: 0,
     );
   }
 
   QuestionState copyWith({
     BaseState<List<QuestionEntity>>? questionsState,
-    int? currentIndex,
+    int? currentIndexPage,
     int? time,
     Map<int, String>? answer,
     bool? enabled,
@@ -59,11 +42,7 @@ class QuestionState {
   }) {
     return QuestionState(
       questionsState: questionsState ?? this.questionsState,
-      currentIndex: currentIndex ?? this.currentIndex,
-      time: time ?? this.time,
-      selectedAnswers: answer ?? selectedAnswers,
-      isButtonEnabled: enabled ?? isButtonEnabled,
-      examResultState: examResultState ?? this.examResultState,
+      currentIndexPage: currentIndexPage ?? this.currentIndexPage,
     );
   }
 }

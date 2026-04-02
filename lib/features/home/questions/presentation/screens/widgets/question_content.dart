@@ -1,25 +1,19 @@
-import 'package:exam_app_elevate/features/home/questions/data/model/answers_list_response.dart';
-import 'package:exam_app_elevate/features/home/questions/data/model/question_types.dart';
+import 'package:exam_app_elevate/features/home/questions/domain/entity/question_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../view_model/question_cubit.dart';
-import '../../view_model/question_event.dart';
 import 'answers_widget.dart';
 
 class QuestionContent extends StatelessWidget {
   const QuestionContent({
     super.key,
-    required this.question,
-    required this.answers,
-    required this.questionTypes,
-    required this.selectedAnswerKey,
+    required this.questionEntity,
+    required this.onTap,
   });
-  final String question;
-  final List<AnswersListResponse> answers;
-  final String selectedAnswerKey; // الإجابة المختارة للسؤال ده حالياً
-  final QuestionTypes questionTypes;
+
+  final QuestionEntity questionEntity;
+  final Function(String) onTap;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -27,17 +21,16 @@ class QuestionContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 16.h,
         children: [
-          Text(question),
-          ...answers.map(
-            (e) => AnswersWidget(
-              questionTypes: questionTypes,
-              answers: e.answer ?? "",
-              isSelected: selectedAnswerKey == e.key,
+          Text(questionEntity.question),
+          ...questionEntity.answersListResponse.map(
+            (e) => InkWell(
               onTap: () {
-                context.read<QuestionCubit>().doIntent(
-                  AnswerSelectedEvent(e.key ?? ""),
-                );
+                onTap(e.key ?? "");
               },
+              child: AnswersWidget(
+                answer: e.answer ?? "",
+                isSelected: questionEntity.userAnswer == e.key,
+              ),
             ),
           ),
         ],

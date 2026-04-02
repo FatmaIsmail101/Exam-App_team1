@@ -37,4 +37,9 @@ abstract class AppStrings {
   static const String timeOutException = "Something went wrong";
   static const String timeOutMessage = "Time out !!";
   static const String noData = "No Data";
+  static const String exam = "Exam";
+  static const String finish = "Finish";
+  static const String viewScore = "Exam Score";
+  static const String showResult = "Show Result";
+  static const String startAgain = "Start Again";
 }
