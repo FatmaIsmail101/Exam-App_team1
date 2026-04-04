@@ -226,7 +226,12 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RoutesName.register,
+                              );
+                            },
                             child: Text(
                               'Sign up',
                               style: TextThemeApp.medium20Black.copyWith(
