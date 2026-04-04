@@ -15,7 +15,7 @@ class RegisterInitial extends RegisterState {}
 class RegisterLoading extends RegisterState {}
 
 class RegisterSuccess extends RegisterState {
-  final LoginEntity login;
+  final AuthEntity login;
   const RegisterSuccess(this.login);
 
   @override

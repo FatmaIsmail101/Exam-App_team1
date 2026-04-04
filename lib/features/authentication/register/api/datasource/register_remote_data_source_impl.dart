@@ -1,5 +1,7 @@
+import 'package:exam_app_elevate/config/base_response/base_response.dart';
+import 'package:exam_app_elevate/features/authentication/auth_response/auth_base_response.dart';
+import 'package:exam_app_elevate/features/authentication/auth_response/user_dto.dart';
 import 'package:exam_app_elevate/features/authentication/register/api/register_api.dart';
-import 'package:exam_app_elevate/features/authentication/register/data/models/register_model.dart';
 import 'package:exam_app_elevate/features/authentication/register/data/models/register_request_model.dart';
 import 'package:injectable/injectable.dart';
 import '../../data/datasources/register_remote_data_source_contract.dart';
@@ -10,7 +12,12 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSourceContract {
   RegisterRemoteDataSourceImpl(this.api);
 
   @override
-  Future<RegisterModel> register(RegisterRequestModel request) {
-    return api.register(request);
+  Future<BaseResponse<AuthBaseResponse>> register(RegisterRequestModel request) async {
+    try {
+      final response = await api.register(request);
+      return SuccessBaseResponse(data: response);
+    } catch (e, s) {
+      return ErrorBaseResponse(message: e.toString());
+    }
   }
 }

@@ -11,5 +11,5 @@ class ErrorBaseResponse<T> extends BaseResponse<T> {
   final String? message;
   final int? code;
 
-  ErrorBaseResponse({this.message, this.code});
+  ErrorBaseResponse({this.message, this.code, });
 }

@@ -1,7 +1,6 @@
 
 
 import 'package:exam_app_elevate/features/authentication/auth_response/auth_base_response.dart';
-import 'package:exam_app_elevate/features/authentication/register/data/models/register_model.dart';
 import 'package:exam_app_elevate/features/authentication/register/data/models/register_request_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
@@ -19,7 +18,7 @@ abstract class RegisterApi {
   factory RegisterApi(Dio dio) = _RegisterApi;
 
   @POST(AppEndPoints.signUpEndpoint)
-  Future<RegisterModel> register(
+  Future<AuthBaseResponse> register(
       @Body() RegisterRequestModel request,
       );
 }

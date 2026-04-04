@@ -23,14 +23,14 @@ class LoginCubit extends Cubit<LoginState> {
     final response = await _repository.login(email: email, password: password);
 
     switch (response) {
-      case SuccessBaseResponse<LoginEntity>():
+      case SuccessBaseResponse<AuthEntity>():
       // حفظ الـ token لو المستخدم فعل Remember Me
         if (rememberMe) {
           await SecureStorageService().writeToken(response.data!.token);
         }
         emit(LoginSuccess(response.data!));
 
-      case ErrorBaseResponse<LoginEntity>():
+      case ErrorBaseResponse<AuthEntity>():
         final code = response.code ?? 0;
         final message = switch (code) {
           401 => 'incorrect email or password',
