@@ -69,8 +69,8 @@ import '../../features/authentication/register/domain/repositories/register_repo
     as _i704;
 import '../../features/authentication/register/domain/use_case/register_usecase.dart'
     as _i537;
-import '../../features/authentication/register/peresenation/cubit/register_cubit.dart'
-    as _i980;
+import '../../features/authentication/register/peresenation/view_model/cubit/register_view_model.dart'
+    as _i748;
 import '../dio/dio_module.dart' as _i977;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -144,8 +144,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i402.VerifyEmailUseCase>(
       () => _i402.VerifyEmailUseCase(gh<_i62.VerifyEmailRepoContract>()),
     );
-    gh.factory<_i980.RegisterCubit>(
-      () => _i980.RegisterCubit(gh<_i537.RegisterUseCase>()),
+    gh.factory<_i748.RegisterViewModel>(
+      () => _i748.RegisterViewModel(gh<_i537.RegisterUseCase>()),
     );
     gh.factory<_i200.ForgetPasswordViewModel>(
       () => _i200.ForgetPasswordViewModel(

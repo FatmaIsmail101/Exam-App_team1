@@ -7,7 +7,7 @@ import '../../../../../core/network/storage/secure_storage_service.dart';
 import '../../domain/entity/login_entity.dart';
 import '../../domain/repositories/login_repository.dart';
 
-// register_cubit.dart
+// cubit.dart
 @injectable
 class LoginCubit extends Cubit<LoginState> {
   final LoginRepository _repository;
@@ -23,14 +23,14 @@ class LoginCubit extends Cubit<LoginState> {
     final response = await _repository.login(email: email, password: password);
 
     switch (response) {
-      case SuccessBaseResponse<AuthEntity>():
+      case SuccessBaseResponse<LoginEntity>():
       // حفظ الـ token لو المستخدم فعل Remember Me
         if (rememberMe) {
           await SecureStorageService().writeToken(response.data!.token);
         }
         emit(LoginSuccess(response.data!));
 
-      case ErrorBaseResponse<AuthEntity>():
+      case ErrorBaseResponse<LoginEntity>():
         final code = response.code ?? 0;
         final message = switch (code) {
           401 => 'incorrect email or password',

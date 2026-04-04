@@ -1,3 +1,5 @@
+import 'package:exam_app_elevate/features/authentication/register/peresenation/view_model/cubit/register_view_model.dart';
+import 'package:exam_app_elevate/features/authentication/register/peresenation/view_model/state/register_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,8 +7,8 @@ import '../../../../../config/di/di.dart';
 import '../../../../../core/routes/routes_name.dart';
 import '../../../../../core/theme/text/text_theme_app.dart';
 import '../../data/models/register_request_model.dart';
-import '../cubit/register_cubit.dart';
-import '../cubit/register_state.dart';
+
+import '../view_model/state/register_state.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -41,13 +43,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
+  RegisterViewModel viewModel = getIt.get<RegisterViewModel>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<RegisterCubit>(),
-      child: BlocConsumer<RegisterCubit, RegisterState>(
+      create: (_) => viewModel,
+      child: BlocConsumer<RegisterViewModel, RegisterState>(
         listener: (context, state) {
-          if (state is RegisterSuccess) {
+          if (state.registerState.data != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
@@ -62,11 +66,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             );
 
             Navigator.pushReplacementNamed(context, RoutesName.login);
-          } else if (state is RegisterError) {
+          } else if (state.registerState.errorMessage != null ||
+              state.registerState.errorMessage!.isNotEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  state.message,
+                  state.registerState.errorMessage!,
                   style: TextThemeApp.medium20Black.copyWith(
                     fontSize: 12.sp,
                     color: Colors.white,
@@ -78,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           }
         },
         builder: (context, state) {
-          bool isLoading = state is RegisterLoading;
+          bool isLoading = state.registerState.isLoading;
 
           return Scaffold(
             appBar: AppBar(
@@ -104,7 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     TextFormField(
                       controller: _usernameController,
                       validator: (value) =>
-                      value!.isEmpty ? 'Username is required' : null,
+                          value!.isEmpty ? 'Username is required' : null,
                       decoration: const InputDecoration(
                         labelText: 'User name',
                         hintText: 'Enter your user name',
@@ -119,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: TextFormField(
                             controller: _firstNameController,
                             validator: (value) =>
-                            value!.isEmpty ? 'First name required' : null,
+                                value!.isEmpty ? 'First name required' : null,
                             decoration: const InputDecoration(
                               labelText: 'First name',
                               hintText: 'Enter first name',
@@ -131,7 +136,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: TextFormField(
                             controller: _lastNameController,
                             validator: (value) =>
-                            value!.isEmpty ? 'Last name required' : null,
+                                value!.isEmpty ? 'Last name required' : null,
                             decoration: const InputDecoration(
                               labelText: 'Last name',
                               hintText: 'Enter last name',
@@ -189,7 +194,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             color: const Color(0xff535353),
                           ),
                           onPressed: () => setState(
-                                () => _obscurePassword = !_obscurePassword,
+                            () => _obscurePassword = !_obscurePassword,
                           ),
                         ),
                       ),
@@ -217,8 +222,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             color: const Color(0xff535353),
                           ),
                           onPressed: () => setState(
-                                () => _obscureConfirmPassword =
-                            !_obscureConfirmPassword,
+                            () => _obscureConfirmPassword =
+                                !_obscureConfirmPassword,
                           ),
                         ),
                       ),
@@ -230,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
                       validator: (value) =>
-                      value!.isEmpty ? 'Phone is required' : null,
+                          value!.isEmpty ? 'Phone is required' : null,
                       decoration: const InputDecoration(
                         labelText: 'Phone number',
                         hintText: 'Enter phone number',
@@ -245,19 +250,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onPressed: isLoading
                             ? null
                             : () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<RegisterCubit>().register(
-                              RegisterRequestModel(
-                                email: _emailController.text.trim(),
-                                password: _passwordController.text.trim(),
-                                firstName: _firstNameController.text.trim(),
-                                lastName: _lastNameController.text.trim(),
-                                username: _usernameController.text.trim(),
-                                phone: _phoneController.text.trim(),
-                              ),
-                            );
-                          }
-                        },
+                                viewModel.doIntent(
+                                  RegisterWithEmailAndPasswordEvent(
+                                    requestModel: RegisterRequestModel(
+                                      email: _emailController.text,
+                                      password: _passwordController.text,
+                                      username: _usernameController.text,
+                                      firstName: _firstNameController.text,
+                                      lastName: _lastNameController.text,
+                                      phone: _phoneController.text,
+                                    ),
+                                  ),
+                                );
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff02369C),
                           padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -267,16 +272,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         child: isLoading
                             ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
+                                color: Colors.white,
+                              )
                             : const Text(
-                          'Signup',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xffF9F9F9),
-                          ),
-                        ),
+                                'Signup',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xffF9F9F9),
+                                ),
+                              ),
                       ),
                     ),
                     SizedBox(height: 16.h),
@@ -293,10 +298,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesName.login,
-                            );
+                            Navigator.pushNamed(context, RoutesName.login);
                           },
                           child: Text(
                             'Login',
