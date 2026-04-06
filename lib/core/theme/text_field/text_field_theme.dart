@@ -9,13 +9,13 @@ abstract class TextFieldTheme {
         contentPadding: EdgeInsets.symmetric(horizontal: 4.r, vertical: 8.r),
         counterStyle: TextThemeApp.medium20Black.copyWith(
           color: Color(0xff0F0F0F),
-          fontSize: 24.sp,
+          fontSize: 20.sp,
         ),
         hintStyle: TextThemeApp.medium20Black.copyWith(
           color: Color(0xffA6A6A6),
-          fontSize: 24.sp,
+          fontSize: 20.sp,
         ),
-        labelStyle: TextThemeApp.bodyLarge24Black,
+        labelStyle: TextThemeApp.medium20Black.copyWith(fontSize: 16.sp),
         filled: false,
         focusColor: Color(0xff0F0F0F),
 
