@@ -9,13 +9,11 @@ import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_settings.dart';
 
 import 'config/di/di.dart';
-import 'config/secure/flutter_secure_storage.dart';
 
 final talker = Talker();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await CashingFlutterSecureStorage.init();
   configureDependencies();
 
   Bloc.observer = TalkerBlocObserver(

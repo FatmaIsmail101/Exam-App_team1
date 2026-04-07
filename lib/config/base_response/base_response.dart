@@ -1,3 +1,5 @@
+import '../../../core/values/app_strings.dart';
+
 sealed class BaseResponse<T> {}
 
 class SuccessBaseResponse<T> extends BaseResponse<T> {
@@ -12,4 +14,12 @@ class ErrorBaseResponse<T> extends BaseResponse<T> {
   final int? code;
 
   ErrorBaseResponse({this.message, this.code});
+
+  String get displayMessage => switch (code) {
+    401 => AppStrings.incorrectCredentials,
+    403 => AppStrings.unauthorized,
+    404 => AppStrings.accountNotFound,
+    500 => AppStrings.serverError,
+    _   => message ?? AppStrings.unknownError,
+  };
 }

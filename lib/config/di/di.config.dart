@@ -10,9 +10,11 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../core/network/storage/secure_storage_service.dart' as _i938;
 import '../../features/authentication/forget_password/api/forget_password_client.dart'
     as _i627;
 import '../../features/authentication/forget_password/data/data_source/forget_password_data_source_contract.dart'
@@ -43,6 +45,7 @@ import '../../features/authentication/login/domain/usecases/login_usecase.dart'
 import '../../features/authentication/login/presentation/cubit/cubit.dart'
     as _i844;
 import '../dio/dio_module.dart' as _i977;
+import '../storge_module/storage_module.dart' as _i277;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -51,8 +54,17 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final storageModule = _$StorageModule();
     final dioModule = _$DioModule();
-    gh.singleton<_i361.Dio>(() => dioModule.dio);
+    gh.lazySingleton<_i558.FlutterSecureStorage>(
+      () => storageModule.secureStorage,
+    );
+    gh.lazySingleton<_i938.SecureStorageService>(
+      () => _i938.SecureStorageService(gh<_i558.FlutterSecureStorage>()),
+    );
+    gh.singleton<_i361.Dio>(
+      () => dioModule.dio(gh<_i938.SecureStorageService>()),
+    );
     gh.factory<_i627.ForgetPasswordClient>(
       () => _i627.ForgetPasswordClient(gh<_i361.Dio>()),
     );
@@ -85,6 +97,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i532.LoginUseCase>(
       () => _i532.LoginUseCase(gh<_i1056.LoginRepository>()),
     );
+    gh.factory<_i844.LoginCubit>(
+      () => _i844.LoginCubit(
+        gh<_i1056.LoginRepository>(),
+        gh<_i938.SecureStorageService>(),
+      ),
+    );
     gh.factory<_i200.ForgetPasswordViewModel>(
       () => _i200.ForgetPasswordViewModel(
         gh<_i819.ForgetPasswordUseCase>(),
@@ -92,11 +110,10 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i973.ResetPasswordUseCase>(),
       ),
     );
-    gh.factory<_i844.LoginCubit>(
-      () => _i844.LoginCubit(gh<_i1056.LoginRepository>()),
-    );
     return this;
   }
 }
+
+class _$StorageModule extends _i277.StorageModule {}
 
 class _$DioModule extends _i977.DioModule {}

@@ -4,55 +4,57 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/di/di.dart';
 import '../../../../../core/routes/routes_name.dart';
+import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/text/text_theme_app.dart';
+import '../../../../../core/utils/text_field_validation.dart';
+import '../../../../../core/values/app_strings.dart';
+import '../../../../../core/widgets/custom_snack_bar.dart';
 import '../cubit/cubit.dart';
 import '../cubit/state.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-    bool rememberMe = false;
-    bool obscurePassword = true;
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  bool rememberMe = false;
+  bool obscurePassword = true;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<LoginCubit>(),
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
-          if (state is LoginSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Welcome ${state.login.user.username}',
-                  style: TextThemeApp.medium20Black.copyWith(
-                    fontSize: 12.sp,
-                    color: Colors.white,
-                  ),
-                ),
-                backgroundColor: const Color(0xff4CAF50),
-              ),
+          if (state.data != null) {
+            CustomSnackbar.showSnackBar(
+              context: context,
+              message: '${AppStrings.welcome} ${state.data!.user.username}',
+              type: .success,
             );
-          } else if (state is LoginError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  state.message,
-                  style: TextThemeApp.medium20Black.copyWith(
-                    fontSize: 12.sp,
-                    color: Colors.white,
-                  ),
-                ),
-                backgroundColor: const Color(0xffCC1010),
-              ),
+          } else if (state.errorMessage != null) {
+            CustomSnackbar.showSnackBar(
+              context: context,
+              message: state.errorMessage!,
+              type:.failure,
             );
           }
         },
         builder: (context, state) {
-          bool isLoading = state is LoginLoading;
+          final isLoading = state.isLoading;
 
           return Scaffold(
             appBar: AppBar(
@@ -65,7 +67,7 @@ class LoginScreen extends StatelessWidget {
               ),
               leadingWidth: 50,
               titleSpacing: 0,
-              title: const Text('Login'),
+              title: const Text(AppStrings.login),
             ),
             body: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
@@ -74,58 +76,37 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Email Field
                     TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This Email is not valid';
-                        }
-                        final emailRegex = RegExp(
-                          r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$',
-                        );
-                        if (!emailRegex.hasMatch(value)) {
-                          return 'This Email is not valid';
-                        }
-                        return null;
-                      },
+                      validator: Validation.validateEmail,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       decoration: const InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'Enter your email',
+                        labelText: AppStrings.email,
+                        hintText: AppStrings.enterEmail,
                       ),
                     ),
                     SizedBox(height: 16.h),
 
-                    // Password Field
                     StatefulBuilder(
                       builder: (context, setState) {
                         return TextFormField(
                           controller: passwordController,
                           obscureText: obscurePassword,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Password is required';
-                            }
-                            if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
+                          validator: Validation.validatePassword,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
-                            labelText: 'Password',
-                            hintText: 'Enter your password',
+                            labelText: AppStrings.password,
+                            hintText: AppStrings.enterPassword,
                             suffixIcon: IconButton(
                               icon: Icon(
                                 obscurePassword
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
-                                color: const Color(0xff535353),
+                                color: AppColors.iconGrey,
                               ),
                               onPressed: () => setState(
-                                () => obscurePassword = !obscurePassword,
+                                    () => obscurePassword = !obscurePassword,
                               ),
                             ),
                           ),
@@ -143,15 +124,15 @@ class LoginScreen extends StatelessWidget {
                               builder: (context, setState) {
                                 return Checkbox(
                                   value: rememberMe,
-                                  activeColor: const Color(0xff02369C),
+                                  activeColor: AppColors.primary,
                                   onChanged: (val) => setState(
-                                    () => rememberMe = val ?? false,
+                                        () => rememberMe = val ?? false,
                                   ),
                                 );
                               },
                             ),
                             Text(
-                              'Remember me',
+                              AppStrings.rememberMe,
                               style: TextThemeApp.medium20Black.copyWith(
                                 fontSize: 13.sp,
                               ),
@@ -159,14 +140,12 @@ class LoginScreen extends StatelessWidget {
                           ],
                         ),
                         TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesName.forgetPassword,
-                            );
-                          },
+                          onPressed: () => Navigator.pushNamed(
+                            context,
+                            RoutesName.forgetPassword,
+                          ),
                           child: Text(
-                            'Forget password?',
+                            AppStrings.forgetPassword,
                             style: TextThemeApp.medium20Black.copyWith(
                               fontSize: 12.sp,
                               decoration: TextDecoration.underline,
@@ -177,40 +156,37 @@ class LoginScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 48.h),
 
-                    // Login Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: isLoading
                             ? null
                             : () {
-                                if (formKey.currentState!.validate()) {
-                                  context.read<LoginCubit>().login(
-                                    email: emailController.text.trim(),
-                                    password: passwordController.text.trim(),
-                                    rememberMe: rememberMe,
-                                  );
-                                }
-                              },
+                          if (formKey.currentState!.validate()) {
+                            context.read<LoginCubit>().login(
+                              email: emailController.text.trim(),
+                              password: passwordController.text.trim(),
+                              rememberMe: rememberMe,
+                            );
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff02369C),
+                          backgroundColor: AppColors.primary,
                           padding: EdgeInsets.symmetric(vertical: 12.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100.r),
                           ),
                         ),
                         child: isLoading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
+                            ? CircularProgressIndicator(color: AppColors.white)
                             : Text(
-                                'Login',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xffF9F9F9),
-                                ),
-                              ),
+                          AppStrings.login,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.white,
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: 16.h),
@@ -220,7 +196,7 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Don't have an account? ",
+                            AppStrings.dontHaveAccount,
                             style: TextThemeApp.medium20Black.copyWith(
                               fontSize: 15.sp,
                             ),
@@ -228,12 +204,12 @@ class LoginScreen extends StatelessWidget {
                           GestureDetector(
                             onTap: () {},
                             child: Text(
-                              'Sign up',
+                              AppStrings.signUp,
                               style: TextThemeApp.medium20Black.copyWith(
                                 fontSize: 15.sp,
-                                color: const Color(0xff02369C),
+                                color: AppColors.primary,
                                 decoration: TextDecoration.underline,
-                                decorationColor: const Color(0xff02369C),
+                                decorationColor: AppColors.primary,
                               ),
                             ),
                           ),

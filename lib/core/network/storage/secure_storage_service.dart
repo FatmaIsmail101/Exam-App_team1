@@ -1,20 +1,27 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:injectable/injectable.dart';
 
+import '../../values/secure_storage_keys.dart';
+@lazySingleton
 class SecureStorageService {
-  final _storage = const FlutterSecureStorage();
+  final FlutterSecureStorage _storage;
 
-  // Save token
-  Future<void> writeToken(String token) async {
-    await _storage.write(key: 'auth_token', value: token);
-  }
+  SecureStorageService(this._storage);
 
-  // Read token
-  Future<String?> readToken() async {
-    return await _storage.read(key: 'auth_token');
-  }
+  Future<void> writeToken(String token) =>
+      _storage.write(key: SecureStorageKeys.token, value: token);
 
-  // Delete token (logout)
-  Future<void> deleteToken() async {
-    await _storage.delete(key: 'auth_token');
+  Future<String?> readToken() =>
+      _storage.read(key: SecureStorageKeys.token);
+
+  Future<void> deleteToken() =>
+      _storage.delete(key: SecureStorageKeys.token);
+
+  Future<void> writeRememberMe(bool value) =>
+      _storage.write(key: SecureStorageKeys.rememberMe, value: value.toString());
+
+  Future<bool> readRememberMe() async {
+    final value = await _storage.read(key: SecureStorageKeys.rememberMe);
+    return value == 'true';
   }
 }
