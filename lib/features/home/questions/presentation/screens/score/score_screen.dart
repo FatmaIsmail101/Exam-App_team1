@@ -9,7 +9,6 @@ import '../widgets/score_result_widget.dart';
 
 class ScoreScreen extends StatelessWidget {
   const ScoreScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

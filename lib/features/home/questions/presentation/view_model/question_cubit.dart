@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:exam_app_elevate/config/base_response/base_response.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/exam_result.dart';
 import 'package:exam_app_elevate/features/home/questions/domain/entity/exam_entity.dart';
@@ -8,11 +7,12 @@ import 'package:exam_app_elevate/features/home/questions/domain/use_case/questio
 import 'package:exam_app_elevate/features/home/questions/presentation/view_model/question_event.dart';
 import 'package:exam_app_elevate/features/home/questions/presentation/view_model/question_state.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../../../config/base_state/base_state.dart';
 import '../../domain/entity/question_entity.dart';
 
-class QuestionCubit extends Cubit<QuestionState> {
+class QuestionCubit extends HydratedCubit<QuestionState> {
   Timer? _timer;
   ExamEntity examEntity;
   int remainingSec = 0;
@@ -46,10 +46,11 @@ class QuestionCubit extends Cubit<QuestionState> {
   Future<void> _getQuestions() async {
     emit(
       state.copyWith(
+        currentIndexPage: 0, // ✅ صفر الـ Index هنا
         questionsState: BaseState<List<QuestionEntity>>(
           isLoading: true,
-          data: null,
-          errorMessage: null,
+          // data: null,
+          // errorMessage: null,
         ),
       ),
     );
@@ -141,5 +142,30 @@ class QuestionCubit extends Cubit<QuestionState> {
       correctCounter: correctAnswer,
       wrongCounter: wrongAnswer,
     );
+  }
+
+  // داخل الـ Cubit
+  @override
+  QuestionState? fromJson(Map<String, dynamic> json) {
+    try {
+      final loadedState = QuestionState.fromJson(json);
+      if (loadedState.cachedQuestions != null) {
+        // ✅ لازم نرجعها في success عشان الـ UI يحس بيها من غير ما ينادي API
+        return loadedState.copyWith(
+          questionsState: BaseState<List<QuestionEntity>>(
+            data: loadedState.cachedQuestions,
+          ),
+        );
+      }
+      return loadedState;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic>? toJson(QuestionState state) {
+    // Automatically saves whenever 'emit' is called
+    return state.toJson();
   }
 }

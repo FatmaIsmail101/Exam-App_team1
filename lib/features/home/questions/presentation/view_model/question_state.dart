@@ -1,5 +1,4 @@
 import 'package:exam_app_elevate/config/base_state/base_state.dart';
-import 'package:exam_app_elevate/features/home/questions/data/model/exam_result.dart';
 import 'package:exam_app_elevate/features/home/questions/domain/entity/question_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -15,11 +14,14 @@ class QuestionState {
         data: null,
         errorMessage: null,
       );
+  //for caching
+  final List<QuestionEntity>? cachedQuestions;
 
   //PageIndex
   int currentIndexPage;
 
   QuestionState({
+    this.cachedQuestions,
     BaseState<List<QuestionEntity>>? questionsState,
     this.currentIndexPage = 0,
   }) {
@@ -28,6 +30,7 @@ class QuestionState {
 
   static QuestionState init() {
     return QuestionState(
+      cachedQuestions: null,
       questionsState: BaseState<List<QuestionEntity>>(
         isLoading: true,
         data: null,
@@ -38,14 +41,13 @@ class QuestionState {
   }
 
   QuestionState copyWith({
+    List<QuestionEntity>? cachedQuestions,
     BaseState<List<QuestionEntity>>? questionsState,
     int? currentIndexPage,
-    int? time,
-    Map<int, String>? answer,
-    bool? enabled,
-    BaseState<ExamResult>? examResultState,
   }) {
     return QuestionState(
+      cachedQuestions:
+          cachedQuestions ?? questionsState?.data ?? this.cachedQuestions,
       questionsState: questionsState ?? this.questionsState,
       currentIndexPage: currentIndexPage ?? this.currentIndexPage,
     );

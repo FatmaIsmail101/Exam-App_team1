@@ -1,5 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import '../../data/model/answers_list_response.dart';
 
+part 'question_entity.g.dart';
+
+@JsonSerializable()
 class QuestionEntity {
   List<AnswersListResponse> answersListResponse;
   String type;
@@ -43,4 +48,8 @@ class QuestionEntity {
       correctAnswerKey: correctAnswerKey ?? this.correctAnswerKey,
     );
   }
+
+  factory QuestionEntity.fromJson(Map<String, dynamic> json) =>
+      _$QuestionEntityFromJson(json);
+  Map<String, dynamic> toJson() => _$QuestionEntityToJson(this);
 }
