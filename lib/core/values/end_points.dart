@@ -47,4 +47,6 @@ class AppEndPoints {
   static String getSubjectById(String subjectId) {
     return "$baseUrl/subjects/$subjectId";
   }
+
+  static const String getAllQuestionsOnSubject = "$baseUrl/questions";
 }

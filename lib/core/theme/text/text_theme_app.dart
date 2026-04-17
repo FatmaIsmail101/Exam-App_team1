@@ -40,4 +40,9 @@ abstract class TextThemeApp {
     fontWeight: FontWeight.w600,
     color: Color(0xff0F0F0F),
   );
+  static TextStyle regular24Red = GoogleFonts.roboto(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w600,
+    color: Color(0xffCC1010),
+  );
 }
