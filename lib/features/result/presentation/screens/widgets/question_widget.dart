@@ -9,6 +9,7 @@ class QuestionWidget extends StatelessWidget {
   final QuestionEntity questionEntity;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: .symmetric(vertical: 16.h, horizontal: 8.w),
       decoration: BoxDecoration(
@@ -26,7 +27,12 @@ class QuestionWidget extends StatelessWidget {
       child: Column(
         spacing: 16.h,
         children: [
-          Text(questionEntity.question),
+          Text(
+            questionEntity.question,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: Color(0xff0F0F0F),
+            ),
+          ),
 
           ...questionEntity.answersListResponse.map(
             (e) => AnswerWidget(

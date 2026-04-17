@@ -24,8 +24,10 @@ class ResultScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => QuestionCubit(getIt<QuestionUsecase>(), examEntity),
       child: Scaffold(
+        backgroundColor: Color(0xffF9F9F9),
         appBar: AppBar(
           automaticallyImplyLeading: false,
+          backgroundColor: Color(0xffF9F9F9),
           titleSpacing: 8.w,
           title: Row(
             children: [
@@ -37,7 +39,7 @@ class ResultScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              Text(AppStrings.exam, style: theme.textTheme.bodyMedium),
+              Text(AppStrings.answer, style: theme.textTheme.bodyMedium),
             ],
           ),
         ),
