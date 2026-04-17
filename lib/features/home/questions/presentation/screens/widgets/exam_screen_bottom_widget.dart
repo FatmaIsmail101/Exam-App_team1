@@ -52,7 +52,10 @@ class ExamScreenBottomWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.r),
               side: BorderSide(color: Color(0xff02369C)),
             ),
-            padding: .symmetric(horizontal: 65.w, vertical: 14.h),
+            padding: .symmetric(
+              horizontal: isLast ? 55.w : 65.w,
+              vertical: 14.h,
+            ),
           ),
           // داخل زرار الـ Next
           // جوه زرار الـ Next في الـ ExamScreenBottomWidget

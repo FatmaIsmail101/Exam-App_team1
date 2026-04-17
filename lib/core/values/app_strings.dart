@@ -45,4 +45,5 @@ abstract class AppStrings {
   static const String yourScore = "Your Score";
   static const String wrong = "Wrong";
   static const String correct = "Correct";
+  static const String answer = "Answers";
 }

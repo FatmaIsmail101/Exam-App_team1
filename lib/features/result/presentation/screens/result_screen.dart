@@ -21,7 +21,7 @@ class ResultScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text(AppStrings.viewScore),
+        title: Text(AppStrings.answer),
       ),
     );
   }
