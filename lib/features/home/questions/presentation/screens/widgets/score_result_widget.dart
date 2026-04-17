@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../core/values/app_strings.dart';
+
 class ScoreResultWidget extends StatelessWidget {
   const ScoreResultWidget({
     super.key,
@@ -21,14 +23,14 @@ class ScoreResultWidget extends StatelessWidget {
           spacing: 50.w,
 
           children: [
-            Text("Correct"),
+            Text(AppStrings.correct),
 
             Container(
-              width: 25.w,
+              padding: .all(4.w),
 
               alignment: .center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(110.r),
                 border: .all(color: Color(0xff02369C), width: 2.w),
               ),
               child: Text(correct.toString(), textAlign: .center),
@@ -39,12 +41,13 @@ class ScoreResultWidget extends StatelessWidget {
           spacing: 56.w,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("Wrong"),
+            Text(AppStrings.wrong),
             Container(
-              width: 25.w,
+              padding: EdgeInsets.all(4.w),
+              // width: 25.w,
               alignment: .center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(110.r),
                 border: .all(color: Color(0xffCC1010), width: 2.w),
               ),
               child: Text(wrong.toString()),

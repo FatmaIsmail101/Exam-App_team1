@@ -26,7 +26,11 @@ class AnswersWidget extends StatelessWidget {
       child: Row(
         spacing: 4.w,
         children: [
-          Image.asset(IconPaths.singleChoiceIcon),
+          Image.asset(
+            isSelected
+                ? IconPaths.selectedSingleChoiceIcon
+                : IconPaths.singleChoiceIcon,
+          ),
           Expanded(
             child: Text(
               answer,

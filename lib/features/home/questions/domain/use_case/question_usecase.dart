@@ -10,7 +10,7 @@ class QuestionUsecase {
 
   QuestionUsecase(this.repo);
 
-  Future<BaseResponse<List<QuestionEntity>>> getQuestions(String id) async {
-    return repo.getQuestions(id);
+  Future<BaseResponse<List<QuestionEntity>>> getQuestions() async {
+    return repo.getQuestions();
   }
 }

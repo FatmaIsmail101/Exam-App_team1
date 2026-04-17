@@ -18,12 +18,12 @@ class QuestionDataSourceImpl implements QuestionsDataSourceContract {
   QuestionDataSourceImpl(this.questionClient);
 
   @override
-  Future<BaseResponse<QuestionsResponse>> getAllQuestions(String id) async {
+  Future<BaseResponse<QuestionsResponse>> getAllQuestions() async {
     try {
       final token = await CashingFlutterSecureStorage.get(
         SecureStorageKeys.token,
       );
-      final response = await questionClient.getAllQuestions(id, token ?? "");
+      final response = await questionClient.getAllQuestions(token ?? "");
       return SuccessBaseResponse(data: response);
     } on DioException catch (e) {
       return ErrorBaseResponse(

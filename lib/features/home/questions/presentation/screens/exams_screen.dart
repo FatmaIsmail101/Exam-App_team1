@@ -2,6 +2,7 @@ import 'package:exam_app_elevate/config/di/di.dart';
 import 'package:exam_app_elevate/core/values/icon_paths.dart';
 import 'package:exam_app_elevate/features/home/questions/domain/entity/exam_entity.dart';
 import 'package:exam_app_elevate/features/home/questions/presentation/screens/general_function/formate_time.dart';
+import 'package:exam_app_elevate/features/home/questions/presentation/screens/widgets/exam_screen_bottom_widget.dart';
 import 'package:exam_app_elevate/features/home/questions/presentation/screens/widgets/question_content.dart';
 import 'package:exam_app_elevate/features/home/questions/presentation/screens/widgets/question_header.dart';
 import 'package:exam_app_elevate/features/home/questions/presentation/view_model/question_cubit.dart';
@@ -25,7 +26,7 @@ class ExamsScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final examEntity = ExamEntity(
       id: "670070a830a3c3c1944a9c63",
-      duration: 1,
+      duration: 30,
       numOfQuestions: 23,
     );
 
@@ -76,8 +77,10 @@ class ExamsScreen extends StatelessWidget {
 
             body: BlocConsumer<QuestionCubit, QuestionState>(
               listener: (context, state) {
-                if (cubit.remainingSec == 0 &&
-                    state.questionsState.data!.isNotEmpty) {
+                if (cubit.remainingSec == 0
+                //&&
+                //state.questionsState.data?.isNotEmpty
+                ) {
                   CustomDialog.showTimeOutDialog(context, () {
                     talker.warning("msg");
                     context.read<QuestionCubit>().doIntent(FinishExamEvent());
@@ -123,7 +126,7 @@ class ExamsScreen extends StatelessWidget {
                       spacing: 24.h,
                       children: [
                         QuestionHeader(
-                          totalQuetionNum: state.currentIndexPage,
+                          totalQuetionNum: state.currentIndexPage + 1,
                           questionNum: state.questionsState.data!.length,
                         ),
                         Expanded(
@@ -143,6 +146,31 @@ class ExamsScreen extends StatelessWidget {
                             },
                             itemCount: state.questionsState.data!.length,
                           ),
+                        ),
+                        ExamScreenBottomWidget(
+                          isLast:
+                              state.currentIndexPage ==
+                              state.questionsState.data!.length - 1,
+                          onPrev: state.currentIndexPage == 0
+                              ? null
+                              : () {
+                                  context.read<QuestionCubit>().doIntent(
+                                    PrevPageEvent(),
+                                  );
+                                },
+                          onNext:
+                              state
+                                      .questionsState
+                                      .data![state.currentIndexPage]
+                                      .userAnswer
+                                      .isNotEmpty ==
+                                  true
+                              ? () {
+                                  context.read<QuestionCubit>().doIntent(
+                                    NextPageEvent(),
+                                  );
+                                }
+                              : null,
                         ),
                       ],
                     ),

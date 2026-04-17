@@ -2,12 +2,9 @@ import 'package:exam_app_elevate/core/routes/routes_name.dart';
 import 'package:exam_app_elevate/core/values/app_strings.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/exam_result.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import '../../view_model/question_cubit.dart';
-import '../../view_model/question_event.dart';
 import '../widgets/score_result_widget.dart';
 
 class ScoreScreen extends StatelessWidget {
@@ -35,7 +32,7 @@ class ScoreScreen extends StatelessWidget {
           spacing: 24.h,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Your score"),
+            Text(AppStrings.yourScore),
             Row(
               spacing: 24.w,
               children: [
@@ -49,7 +46,7 @@ class ScoreScreen extends StatelessWidget {
                       100,
                   // دي النسبة (80 / 100)
                   center: Text(
-                    "2",
+                    "${((examResult.correctCounter / (examResult.correctCounter + examResult.wrongCounter)) * 100).toStringAsFixed(2)}%",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   progressColor: Color(0xff02369C),
@@ -84,7 +81,7 @@ class ScoreScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                context.read<QuestionCubit>().doIntent(GetQuestionEvent());
+                // context.read<QuestionCubit>().doIntent(GetQuestionEvent());
 
                 Navigator.pushNamedAndRemoveUntil(
                   context,

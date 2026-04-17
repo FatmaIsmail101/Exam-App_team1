@@ -1,9 +1,14 @@
 import 'package:exam_app_elevate/config/base_state/base_state.dart';
 import 'package:exam_app_elevate/features/home/questions/data/model/exam_result.dart';
 import 'package:exam_app_elevate/features/home/questions/domain/entity/question_entity.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'question_state.g.dart';
+
+@JsonSerializable()
 class QuestionState {
   //Questions
+  @JsonKey(includeFromJson: false, includeToJson: false)
   BaseState<List<QuestionEntity>> questionsState =
       BaseState<List<QuestionEntity>>(
         isLoading: false,
@@ -45,4 +50,10 @@ class QuestionState {
       currentIndexPage: currentIndexPage ?? this.currentIndexPage,
     );
   }
+
+  factory QuestionState.fromJson(Map<String, dynamic> json) =>
+      _$QuestionStateFromJson(json);
+
+  // Generated toJson
+  Map<String, dynamic> toJson() => _$QuestionStateToJson(this);
 }

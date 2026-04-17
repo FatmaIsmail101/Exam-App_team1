@@ -20,7 +20,7 @@ class QuestionsListResponse {
   String? correct;
   @JsonKey(name: "exam")
   ExamResponse? examResponse;
-  @JsonKey(name: "subject")
+  @JsonKey(name: "subject", fromJson: _subjectIdFromJson)
   String? subject;
   @JsonKey(name: 'createdAt')
   String? createdAt;
@@ -35,6 +35,13 @@ class QuestionsListResponse {
     this.subject,
     this.createdAt,
   });
+
+  static String? _subjectIdFromJson(Object? json) {
+    if (json is Map<String, dynamic>) {
+      return json['_id'] as String?; // Extract just the ID string from the Map
+    }
+    return json as String?; // If it's already a String, return it
+  }
 
   // 2. الدالة دي هتضمن إن الداتا لو جات String تتحول لـ List أو ترجع فاضية بدل ما تضرب
   static List<AnswersListResponse>? _answersFromJson(Object? json) {

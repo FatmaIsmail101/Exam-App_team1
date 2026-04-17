@@ -54,7 +54,7 @@ class QuestionCubit extends Cubit<QuestionState> {
       ),
     );
 
-    final response = await _useCase.getQuestions(examEntity.id);
+    final response = await _useCase.getQuestions();
     if (isClosed) return;
 
     switch (response) {
@@ -137,6 +137,9 @@ class QuestionCubit extends Cubit<QuestionState> {
         wrongAnswer++;
       }
     }
-    ExamResult(correctCounter: correctAnswer, wrongCounter: wrongAnswer);
+    examResult = ExamResult(
+      correctCounter: correctAnswer,
+      wrongCounter: wrongAnswer,
+    );
   }
 }

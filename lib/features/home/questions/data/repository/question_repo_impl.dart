@@ -12,8 +12,8 @@ class QuestionRepoImpl implements QuestionRepoContract {
   QuestionRepoImpl(this.dataSource);
 
   @override
-  Future<BaseResponse<List<QuestionEntity>>> getQuestions(String id) async {
-    final response = await dataSource.getAllQuestions(id);
+  Future<BaseResponse<List<QuestionEntity>>> getQuestions() async {
+    final response = await dataSource.getAllQuestions();
     switch (response) {
       case SuccessBaseResponse<QuestionsResponse>():
         return SuccessBaseResponse<List<QuestionEntity>>(

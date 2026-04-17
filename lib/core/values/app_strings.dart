@@ -42,4 +42,7 @@ abstract class AppStrings {
   static const String viewScore = "Exam Score";
   static const String showResult = "Show Result";
   static const String startAgain = "Start Again";
+  static const String yourScore = "Your Score";
+  static const String wrong = "Wrong";
+  static const String correct = "Correct";
 }

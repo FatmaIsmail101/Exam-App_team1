@@ -31,8 +31,7 @@ class QuestionHeader extends StatelessWidget {
         ),
         LinearProgressIndicator(
           trackGap: 10,
-          value: questionNum / totalQuetionNum,
-          // القيمة من 0.0 لـ 1.0
+          value: (totalQuetionNum + 1) / questionNum,
           backgroundColor: Color(0xffCFCFCF),
           valueColor: AlwaysStoppedAnimation<Color>(Color(0xff02369C)),
           minHeight: 4.h,

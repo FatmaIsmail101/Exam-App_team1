@@ -5,6 +5,7 @@ import '../../features/authentication/forget_password/presentation/screens/forge
 import '../../features/authentication/login/presentation/screens/login_screen.dart';
 import '../../features/home/questions/presentation/screens/exams_screen.dart';
 import '../../features/home/questions/presentation/screens/score/score_screen.dart';
+import '../../features/result/presentation/screens/result_screen.dart';
 
 class Routes {
   static Route<dynamic> routes(RouteSettings settings) {
@@ -29,7 +30,11 @@ class Routes {
           builder: (_) => const ScoreScreen(),
           settings: settings,
         );
-
+      case RoutesName.resultScreen:
+        return MaterialPageRoute(
+          builder: (_) => const ResultScreen(),
+          settings: settings,
+        );
       default:
         return MaterialPageRoute(builder: (context) => Scaffold());
     }

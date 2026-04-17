@@ -2,8 +2,9 @@
 
 import 'package:exam_app_elevate/exam_app.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:talker/talker.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_settings.dart';
@@ -17,6 +18,10 @@ final talker = Talker();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final directory = await getApplicationDocumentsDirectory();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: HydratedStorageDirectory(directory.path),
+  );
   await CashingFlutterSecureStorage.init();
   await configureDependencies();
 
@@ -39,7 +44,11 @@ void main() async {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) => ExamApp(
-        startRoute: token != null ? RoutesName.examsScreen : RoutesName.login,
+        startRoute:
+            //token != null ?
+            //  RoutesName.examsScreen
+            //    :
+            RoutesName.login,
       ),
     ),
   );

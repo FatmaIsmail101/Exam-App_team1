@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../core/routes/routes_name.dart';
 import '../../../../../../core/values/app_strings.dart';
+import '../../view_model/question_cubit.dart';
+import '../../view_model/question_event.dart';
 
 class ExamScreenBottomWidget extends StatelessWidget {
   const ExamScreenBottomWidget({
@@ -12,9 +16,8 @@ class ExamScreenBottomWidget extends StatelessWidget {
   });
 
   final Function? onNext;
-  final Function onPrev;
+  final Function? onPrev;
   final bool isLast;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -33,7 +36,7 @@ class ExamScreenBottomWidget extends StatelessWidget {
             padding: .symmetric(horizontal: 65.w, vertical: 14.h),
           ),
           onPressed: () {
-            onPrev();
+            onPrev?.call();
           },
           child: Text(
             AppStrings.backButtonText,
@@ -54,7 +57,17 @@ class ExamScreenBottomWidget extends StatelessWidget {
           // داخل زرار الـ Next
           // جوه زرار الـ Next في الـ ExamScreenBottomWidget
           onPressed: () {
-            onNext?.call();
+            if (isLast) {
+              final cubit = context.read<QuestionCubit>();
+              cubit.doIntent(FinishExamEvent());
+              Navigator.pushNamed(
+                context,
+                RoutesName.scoreScreen,
+                arguments: cubit.examResult,
+              );
+            } else {
+              onNext?.call();
+            }
           },
           child: Text(
             isLast ? AppStrings.finish : AppStrings.nextButtonText,
