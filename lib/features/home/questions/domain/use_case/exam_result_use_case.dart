@@ -11,6 +11,6 @@ class ExamResultUseCase {
   Future<BaseResponse<ExamResult>> getAnswerCount(
     Map<int, String> userAnswers,
   ) async {
-    return repo.getAnswerCount(userAnswers);
+    return await repo.getAnswerCount(userAnswers);
   }
 }

@@ -48,7 +48,7 @@ void main() async {
             //token != null ?
             //  RoutesName.examsScreen
             //    :
-            RoutesName.login,
+            RoutesName.subjectScreen,
       ),
     ),
   );
