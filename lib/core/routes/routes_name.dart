@@ -9,4 +9,5 @@ abstract class RoutesName {
   static const String examsScreen = "examsScreen";
   static const String resultScreen = "resultScreen";
   static const String scoreScreen = "scoreScreen";
+  static const String subjectScreen = "subjectScreen";
 }

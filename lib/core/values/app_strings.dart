@@ -46,4 +46,5 @@ abstract class AppStrings {
   static const String wrong = "Wrong";
   static const String correct = "Correct";
   static const String answer = "Answers";
+  static const String survey = "Survey";
 }

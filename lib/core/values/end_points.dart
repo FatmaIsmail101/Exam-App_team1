@@ -49,4 +49,5 @@ class AppEndPoints {
   }
 
   static const String getAllQuestionsOnSubject = "$baseUrl/questions";
+  static const String getAllSubject = "$baseUrl/subjects";
 }

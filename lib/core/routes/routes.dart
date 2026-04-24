@@ -1,6 +1,6 @@
 import 'package:exam_app_elevate/core/routes/routes_name.dart';
+import 'package:exam_app_elevate/features/home/subject/presentation/screen/subject_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../../features/authentication/forget_password/presentation/screens/forget_password_screen.dart';
 import '../../features/authentication/login/presentation/screens/login_screen.dart';
 import '../../features/home/questions/presentation/screens/exams_screen.dart';
@@ -33,6 +33,11 @@ class Routes {
       case RoutesName.resultScreen:
         return MaterialPageRoute(
           builder: (_) => const ResultScreen(),
+          settings: settings,
+        );
+      case RoutesName.subjectScreen:
+        return MaterialPageRoute(
+          builder: (_) => const SubjectScreen(),
           settings: settings,
         );
       default:
